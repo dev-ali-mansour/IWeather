@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ WeatherApp Android Application developed by: Ali Mansour
+ ################# WeatherApp IS FREE SOFTWARE ###################
+ https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
+-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/CitiesFragment">
+
+    <fragment
+        android:id="@+id/CitiesFragment"
+        android:name="dev.alimansour.planradarassessment.presentation.CitiesFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_cities">
+
+        <action
+            android:id="@+id/action_CitiesFragment_to_HistoricalFragment"
+            app:destination="@id/HistoricalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/HistoricalFragment"
+        android:name="dev.alimansour.planradarassessment.presentation.HistoricalFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_historical">
+
+        <action
+            android:id="@+id/action_HistoricalFragment_to_CitiesFragment"
+            app:destination="@id/CitiesFragment" />
+    </fragment>
+</navigation>
