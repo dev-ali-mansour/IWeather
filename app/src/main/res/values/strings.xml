@@ -12,4 +12,6 @@
     <string name="add_city">Add city</string>
     <string name="abstract_background_image">Abstract Background Image</string>
     <string name="back_image_description">Back Image includes left arrow. tap on it to go back</string>
+    <string name="city_icon_image">City icon image</string>
+    <string name="info_icon">Info icon</string>
 </resources>

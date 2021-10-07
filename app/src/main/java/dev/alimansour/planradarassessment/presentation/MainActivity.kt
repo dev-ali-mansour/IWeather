@@ -12,7 +12,11 @@ import dev.alimansour.planradarassessment.R
 import dev.alimansour.planradarassessment.databinding.ActivityMainBinding
 import dev.alimansour.planradarassessment.util.dp
 
-
+/**
+ * WeatherApp Android Application developed by: Ali Mansour
+ * ----------------- WeatherApp IS FREE SOFTWARE -------------------
+ * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

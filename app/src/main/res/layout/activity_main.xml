@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
  WeatherApp Android Application developed by: Ali Mansour
  ################# WeatherApp IS FREE SOFTWARE ###################
  https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
@@ -15,13 +16,6 @@
         android:layout_height="150dp"
         android:theme="@style/Theme.PlanRadarAssessment.AppBarOverlay">
 
-        <!--<include
-            android:id="@+id/toolbar_layout"
-            layout="@layout/toolbar" />-->
-        <!--
-         android:layout_marginStart="45dp"
-         android:layout_marginBottom="18dp"
-         -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -45,7 +39,6 @@
                 android:textColor="@color/white"
                 android:visibility="visible"
                 tools:text="App title" />
-
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
