@@ -24,7 +24,10 @@
         android:name="dev.alimansour.planradarassessment.presentation.HistoricalFragment"
         android:label="@string/historical_fragment_label"
         tools:layout="@layout/fragment_historical">
-
+        <argument
+            android:name="cityName"
+            android:defaultValue="london"
+            app:argType="string" />
         <action
             android:id="@+id/action_HistoricalFragment_to_CitiesFragment"
             app:destination="@id/CitiesFragment" />
