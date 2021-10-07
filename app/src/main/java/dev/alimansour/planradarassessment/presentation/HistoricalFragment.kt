@@ -27,6 +27,8 @@ class HistoricalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        (requireActivity() as MainActivity).toolbarTitle = "London Historical"
+
         _binding = FragmentHistoricalBinding.inflate(inflater, container, false)
         return binding.root
 
