@@ -28,7 +28,7 @@ class CitiesAdapter(private val list: List<CityData>) :
             holder.binding.cityName.text = city.title
             holder.itemView.setOnClickListener {
                 val action =
-                    CitiesFragmentDirections.actionCitiesFragmentToHistoricalFragment(city.name)
+                    CitiesFragmentDirections.actionCitiesFragmentToHistoricalFragment(city)
                 Navigation.findNavController(holder.binding.root)
                     .navigate(action)
             }

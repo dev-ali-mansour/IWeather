@@ -18,5 +18,5 @@ interface HistoricalDao {
     fun clearCityHistorical(cityId: Int)
 
     @Query("SELECT * FROM historical_data WHERE cityId = :cityId")
-    fun getHistoricalData(cityId: Int): Historical
+    fun getHistoricalData(cityId: Int): List<Historical>
 }

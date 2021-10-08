@@ -20,10 +20,6 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityDetailsBinding.inflate(layoutInflater)
-        binding.timeNow = SimpleDateFormat(
-            "dd.MM.yyyy - HH:mm",
-            Locale.ENGLISH
-        ).format(Calendar.getInstance().time)
 
         setContentView(binding.root)
 

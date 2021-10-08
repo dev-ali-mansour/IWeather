@@ -31,7 +31,7 @@ class LocalDataSourceImpl(
         }
     }
 
-    override suspend fun fetchHistoricalData(id: Int): Historical =
+    override suspend fun getHistoricalData(id: Int): List<Historical> =
         withContext(Dispatchers.IO) {
             database.historicalDao().getHistoricalData(id)
         }

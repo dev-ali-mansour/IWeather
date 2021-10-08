@@ -30,7 +30,7 @@ interface WeatherRepository {
     /**
      * Fetch historical weather data for specific city
      * @param id City Id
-     * @return CityAndHistorical
+     * @return List<Historical>
      */
-    suspend fun fetchHistoricalData(id: Int): Historical
+    suspend fun getHistoricalData(id: Int): List<Historical>
 }

@@ -61,6 +61,6 @@ class WeatherRepositoryImpl(
     override suspend fun addHistoricalData(list: List<Historical>) =
         localDataSource.addHistoricalData(list)
 
-    override suspend fun fetchHistoricalData(id: Int): Historical =
-        localDataSource.fetchHistoricalData(id)
+    override suspend fun getHistoricalData(id: Int): List<Historical> =
+        localDataSource.getHistoricalData(id)
 }

@@ -9,11 +9,12 @@
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/content_details.xml" value="0.1" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/fragment_cities.xml" value="0.12751677852348994" />
+        <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/fragment_cities.xml" value="0.300561797752809" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/fragment_details.xml" value="0.3359375" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/fragment_historical.xml" value="0.27624309392265195" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/item_city.xml" value="0.33" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/item_historical.xml" value="0.30337078651685395" />
+        <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/search_bottom_sheet.xml" value="0.31307929969104015" />
         <entry key="..\:/Developing/Projects/Android/AliMansour/PlanRadarAssessment/app/src/main/res/layout/toolbar.xml" value="0.1" />
       </map>
     </option>

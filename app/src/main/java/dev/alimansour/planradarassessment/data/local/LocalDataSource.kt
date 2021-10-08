@@ -28,9 +28,9 @@ interface LocalDataSource {
     suspend fun addHistoricalData(list: List<Historical>)
 
     /**
-     * Fetch historical weather data for specific city
+     * Get historical weather data for specific city
      * @param id City Id
      * @return CityAndHistorical
      */
-    suspend fun fetchHistoricalData(id: Int): Historical
+    suspend fun getHistoricalData(id: Int): List<Historical>
 }

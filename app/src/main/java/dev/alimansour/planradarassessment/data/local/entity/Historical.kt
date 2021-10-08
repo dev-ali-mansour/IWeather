@@ -18,7 +18,7 @@ import java.util.*
 
 @Entity(tableName = "historical_data")
 data class Historical(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     var id: Int,
     @Embedded
     var city: City,

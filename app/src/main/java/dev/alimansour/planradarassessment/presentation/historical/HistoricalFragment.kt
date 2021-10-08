@@ -7,8 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dev.alimansour.planradarassessment.data.local.LocalDataSource
+import dev.alimansour.planradarassessment.data.local.LocalDataSourceImpl
+import dev.alimansour.planradarassessment.data.local.WeatherDatabase
+import dev.alimansour.planradarassessment.data.remote.RemoteDataSource
+import dev.alimansour.planradarassessment.data.remote.RemoteDataSourceImpl
+import dev.alimansour.planradarassessment.data.remote.WeatherApi
+import dev.alimansour.planradarassessment.data.repository.WeatherRepositoryImpl
 import dev.alimansour.planradarassessment.databinding.FragmentHistoricalBinding
+import dev.alimansour.planradarassessment.domain.repository.WeatherRepository
 import dev.alimansour.planradarassessment.presentation.MainActivity
+import dev.alimansour.planradarassessment.presentation.cities.CitiesViewModel
+import dev.alimansour.planradarassessment.presentation.cities.CitiesViewModelFactory
 import dev.alimansour.planradarassessment.util.Status
 
 /**
@@ -22,7 +32,13 @@ class HistoricalFragment : Fragment() {
     private lateinit var historicalAdapter: HistoricalAdapter
 
     private val viewModel: HistoricalViewModel by lazy {
-        ViewModelProvider(this).get(HistoricalViewModel::class.java)
+        val remoteDataSource: RemoteDataSource = RemoteDataSourceImpl(WeatherApi.retrofitService)
+        val database = WeatherDatabase.getInstance(requireContext().applicationContext)
+        val localDataSource: LocalDataSource = LocalDataSourceImpl(database)
+        val repository: WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource)
+        val viewModelFactory = HistoricalViewModelFactory(repository)
+
+        ViewModelProvider(requireActivity(), viewModelFactory).get(HistoricalViewModel::class.java)
     }
 
     // This property is only valid between onCreateView and
@@ -33,9 +49,10 @@ class HistoricalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val args = HistoricalFragmentArgs.fromBundle(requireArguments())
+        val city = args.city
 
-        val cityName = requireArguments().getString("cityName")
-        (requireActivity() as MainActivity).toolbarTitle = "$cityName Historical"
+        (requireActivity() as MainActivity).toolbarTitle = "${city.name}, Historical"
 
         _binding = FragmentHistoricalBinding.inflate(inflater, container, false)
 
@@ -56,7 +73,7 @@ class HistoricalFragment : Fragment() {
             })
         }
 
-        cityName?.let { viewModel.getHistoricalData(it) }
+        viewModel.getHistoricalDataList(city.id)
 
         return binding.root
     }
