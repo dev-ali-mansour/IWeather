@@ -1,19 +1,10 @@
 package dev.alimansour.planradarassessment.util
 
-import android.graphics.drawable.Drawable
-import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
-import dev.alimansour.planradarassessment.R
-import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 object BindingAdapters {

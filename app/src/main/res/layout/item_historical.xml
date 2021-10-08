@@ -39,6 +39,7 @@
             android:layout_marginStart="@dimen/small_icon_dimen"
             android:fontFamily="@font/lato_black"
             android:textSize="@dimen/tiny_text_size"
+            android:textColor="@android:color/darker_gray"
             app:date="@{data.date}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconImage"
