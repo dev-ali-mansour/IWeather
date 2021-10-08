@@ -9,7 +9,8 @@ import kotlinx.parcelize.Parcelize
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Parcelize
-data class LocationData(
+data class CityData(
+    val id: Int,
     val name: String,
     val country: String
 ) : Parcelable {

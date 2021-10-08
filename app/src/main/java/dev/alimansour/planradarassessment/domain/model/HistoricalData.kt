@@ -13,7 +13,8 @@ import java.util.*
 
 @Parcelize
 data class HistoricalData(
-    val cityName: String,
+    val id: Int,
+    val city: CityData,
     val icon: String,
     val date: String,
     val description: String,

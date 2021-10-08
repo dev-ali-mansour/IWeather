@@ -9,7 +9,7 @@ import dev.alimansour.planradarassessment.util.Resource
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-interface NetworkDataSource {
+interface RemoteDataSource {
 
     /**
      * Fetch historical weather data for specific city

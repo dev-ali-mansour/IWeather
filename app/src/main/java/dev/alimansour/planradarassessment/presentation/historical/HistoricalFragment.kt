@@ -7,20 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.alimansour.planradarassessment.R
-import dev.alimansour.planradarassessment.data.remote.WeatherAPIService
-import dev.alimansour.planradarassessment.data.remote.NetworkDataSource
-import dev.alimansour.planradarassessment.data.remote.NetworkDataSourceImpl
-import dev.alimansour.planradarassessment.data.remote.WeatherApi
 import dev.alimansour.planradarassessment.databinding.FragmentHistoricalBinding
-import dev.alimansour.planradarassessment.domain.model.HistoricalData
-import dev.alimansour.planradarassessment.domain.model.LocationData
 import dev.alimansour.planradarassessment.presentation.MainActivity
 import dev.alimansour.planradarassessment.util.Status
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour

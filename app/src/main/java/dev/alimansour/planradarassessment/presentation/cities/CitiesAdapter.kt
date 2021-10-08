@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.planradarassessment.databinding.ItemCityBinding
-import dev.alimansour.planradarassessment.domain.model.LocationData
+import dev.alimansour.planradarassessment.domain.model.CityData
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class CitiesAdapter(private val list: List<LocationData>) :
+class CitiesAdapter(private val list: List<CityData>) :
     RecyclerView.Adapter<CitiesAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.alimansour.planradarassessment.databinding.FragmentCitiesBinding
-import dev.alimansour.planradarassessment.domain.model.LocationData
+import dev.alimansour.planradarassessment.domain.model.CityData
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -31,10 +31,10 @@ class CitiesFragment : Fragment() {
 
         citiesAdapter = CitiesAdapter(
             listOf(
-                LocationData("London", "UK"),
-                LocationData("Paris", "FR"),
-                LocationData("Vienna", "AUT"),
-             )
+                CityData(1, "London", "UK"),
+                CityData(2, "Paris", "FR"),
+                CityData(3, "Vienna", "AUT"),
+            )
         )
         binding.citiesRecyclerView.apply {
             setHasFixedSize(true)
