@@ -7,7 +7,7 @@ The application require the internet connection while searching for and adding a
 
 ## Screenshots
 
-![first screenshot](https://i.ibb.co/BgdFk2t/Screenshot-2021-10-08-17-54-15-88-9f89676b8b215e1e3984633e34501759.jpg)
+<img src="https://i.ibb.co/BgdFk2t/Screenshot-2021-10-08-17-54-15-88-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/Drr6nKJ/Screenshot-2021-10-08-17-57-56-62-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/jT06nKt/Screenshot-2021-10-08-17-58-29-55-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/xFd8Sv7/Screenshot-2021-10-08-17-58-42-11-9f89676b8b215e1e3984633e34501759.jpg" width="200">
 
 ## Built With
 
