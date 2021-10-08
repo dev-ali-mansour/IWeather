@@ -5,6 +5,10 @@ This project is a solution for Android Role assignment for an company.
 User can search for a specific city, then the application will search for it's weather data, and cache it for offline usage.
 The application require the internet connection while searching for and adding a new city. Then data will be cached on the device.
 
+## Screenshots
+
+![first screenshot](https://ibb.co/D7sTdft)
+
 ## Built With
 
 * [Kotlin](https://kotlinlang.org) - As aprogrammingg language.
