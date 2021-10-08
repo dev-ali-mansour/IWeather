@@ -6,14 +6,16 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.planradarassessment.databinding.ItemCityBinding
 import dev.alimansour.planradarassessment.domain.model.CityData
+import javax.inject.Inject
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class CitiesAdapter(private val list: List<CityData>) :
+class CitiesAdapter @Inject constructor() :
     RecyclerView.Adapter<CitiesAdapter.AccountViewHolder>() {
+    private lateinit var list: List<CityData>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding: ItemCityBinding = ItemCityBinding.inflate(
@@ -39,6 +41,15 @@ class CitiesAdapter(private val list: List<CityData>) :
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    /**
+     * Set City list
+     * @param cities City List
+     */
+    fun setCitiesList(cities: List<CityData>) {
+        this.list = cities
+        notifyDataSetChanged()
     }
 
     inner class AccountViewHolder(val binding: ItemCityBinding) :

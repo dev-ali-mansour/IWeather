@@ -10,10 +10,7 @@ import kotlinx.coroutines.withContext
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class LocalDataSourceImpl(
-    private val database: WeatherDatabase
-) :
-    LocalDataSource {
+class LocalDataSourceImpl(private val database: WeatherDatabase) : LocalDataSource {
     override suspend fun addCity(city: City) {
         withContext(Dispatchers.IO) {
             database.cityDao().insert(city)

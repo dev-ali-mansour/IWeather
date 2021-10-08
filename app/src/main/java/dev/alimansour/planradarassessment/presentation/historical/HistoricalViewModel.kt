@@ -4,15 +4,19 @@ import androidx.lifecycle.*
 import dev.alimansour.planradarassessment.data.mappers.HistoricalMapper
 import dev.alimansour.planradarassessment.domain.model.HistoricalData
 import dev.alimansour.planradarassessment.domain.repository.WeatherRepository
+import dev.alimansour.planradarassessment.domain.usecase.city.GetHistoricalDataUseCase
 import dev.alimansour.planradarassessment.util.Resource
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class HistoricalViewModel(private val repository: WeatherRepository) : ViewModel() {
+class HistoricalViewModel(
+    private val getHistoricalDataUseCase: GetHistoricalDataUseCase
+) : ViewModel() {
 
     private val _historicalData = MutableLiveData<Resource<List<HistoricalData>>>()
     val historicalData: LiveData<Resource<List<HistoricalData>>>
@@ -29,40 +33,10 @@ class HistoricalViewModel(private val repository: WeatherRepository) : ViewModel
                 _historicalData.postValue(
                     Resource.success(
                         HistoricalMapper.mapFromEntity(
-                            repository.getHistoricalData(
-                                cityId
-                            )
+                            getHistoricalDataUseCase.execute(cityId)
                         )
                     )
                 )
-                /* val dataList = ArrayList<HistoricalData?>()
-                 val resource = remoteDataSource.fetchHistoricalData(cityName)
-                 resource.data?.let { response ->
-                     val name = "${response.city.name}, ${response.city.country}"
-                     response.list?.let { list ->
-                         list.forEach { item ->
-                             dataList.add(
-                                 HistoricalData(
-                                     1,
-                                     CityData(
-                                         response.city.id,
-                                         response.city.name,
-                                         response.city.country
-                                     ),
-                                     "\uF6C4",
-                                     item.date,
-                                     item.weather[0].description,
-                                     item.main.temp,
-                                     item.main.humidity,
-                                     item.wind.speed
-                                 )
-                             )
-                         }
-                     }
-                 }
-
-                 _historicalData.postValue(Resource.success(dataList.toList()))*/
-
             }.onFailure { t ->
                 val message = t.message ?: "Error on loading historical data"
                 _historicalData.value = Resource.error(message, null, null)
@@ -71,12 +45,12 @@ class HistoricalViewModel(private val repository: WeatherRepository) : ViewModel
     }
 }
 
-class HistoricalViewModelFactory(private val repository: WeatherRepository) :
+class HistoricalViewModelFactory @Inject constructor(private val getHistoricalDataUseCase: GetHistoricalDataUseCase) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HistoricalViewModel::class.java)) {
-            return HistoricalViewModel(repository) as T
+            return HistoricalViewModel(getHistoricalDataUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

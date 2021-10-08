@@ -67,14 +67,3 @@ fun Context.isConnected(): Boolean {
 
     return result
 }
-
-fun detectIcon(context: Context, icon: String): String {
-    return when (icon) {
-        "01n" -> "" //clear sky
-        "02n" -> "" //few clouds
-        "02d" -> "" //few clouds
-        "03d" -> "" //scattered clouds
-        "04d" -> "" //broken clouds
-        else -> ""
-    }
-}

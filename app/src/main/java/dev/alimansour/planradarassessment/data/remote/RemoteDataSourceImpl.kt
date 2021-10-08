@@ -10,8 +10,7 @@ import kotlinx.coroutines.withContext
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class RemoteDataSourceImpl(private val WeatherAPIService: WeatherAPIService) :
-    RemoteDataSource {
+class RemoteDataSourceImpl(private val WeatherAPIService: WeatherAPIService) : RemoteDataSource {
 
     override suspend fun fetchHistoricalData(cityName: String): Resource<HistoricalResponse> {
         return runCatching {

@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,22 +14,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import dev.alimansour.planradarassessment.R
-import dev.alimansour.planradarassessment.data.local.LocalDataSource
-import dev.alimansour.planradarassessment.data.local.LocalDataSourceImpl
-import dev.alimansour.planradarassessment.data.local.WeatherDatabase
-import dev.alimansour.planradarassessment.data.remote.RemoteDataSource
-import dev.alimansour.planradarassessment.data.remote.RemoteDataSourceImpl
-import dev.alimansour.planradarassessment.data.remote.WeatherApi
-import dev.alimansour.planradarassessment.data.repository.WeatherRepositoryImpl
 import dev.alimansour.planradarassessment.databinding.ActivityMainBinding
 import dev.alimansour.planradarassessment.databinding.SearchBottomSheetBinding
-import dev.alimansour.planradarassessment.domain.repository.WeatherRepository
 import dev.alimansour.planradarassessment.presentation.cities.CitiesViewModel
-import dev.alimansour.planradarassessment.presentation.cities.CitiesViewModelFactory
 import dev.alimansour.planradarassessment.util.dp
 import dev.alimansour.planradarassessment.util.hideKeyboard
 import dev.alimansour.planradarassessment.util.isConnected
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -44,16 +33,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: CitiesViewModel by lazy {
-        val remoteDataSource: RemoteDataSource = RemoteDataSourceImpl(WeatherApi.retrofitService)
-        val database = WeatherDatabase.getInstance(applicationContext)
-        val localDataSource: LocalDataSource = LocalDataSourceImpl(database)
-        val repository: WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource)
-        val viewModelFactory = CitiesViewModelFactory(repository)
+    @Inject
+    lateinit var viewModel: CitiesViewModel
 
-        ViewModelProvider(this, viewModelFactory).get(CitiesViewModel::class.java)
-    }
+    /* private val viewModel: CitiesViewModel by lazy {
+         val remoteDataSource: RemoteDataSource = RemoteDataSourceImpl(WeatherApi.retrofitService)
+         val database = WeatherDatabase.getInstance(applicationContext)
+         val localDataSource: LocalDataSource = LocalDataSourceImpl(database)
+         val repository: WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource)
+         val viewModelFactory = CitiesViewModelFactory(repository)
 
+         ViewModelProvider(this, viewModelFactory).get(CitiesViewModel::class.java)
+     }
+ */
     var toolbarTitle: String
         get() = binding.toolbarTitle.text.toString()
         set(value) {
@@ -62,6 +54,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (application as MyApplication).appComponent
+            .mainComponentBuilder()
+            .context(this)
+            .activity(this)
+            .build()
+            .inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

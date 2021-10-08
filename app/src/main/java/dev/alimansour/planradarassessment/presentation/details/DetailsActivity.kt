@@ -2,11 +2,13 @@ package dev.alimansour.planradarassessment.presentation.details
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dev.alimansour.planradarassessment.R
 import dev.alimansour.planradarassessment.databinding.ActivityDetailsBinding
 import dev.alimansour.planradarassessment.domain.model.HistoricalData
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
@@ -26,6 +28,7 @@ class DetailsActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
 
         val data = intent.getParcelableExtra<HistoricalData>("data")
         data?.let {

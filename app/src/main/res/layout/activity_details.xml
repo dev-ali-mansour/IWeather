@@ -83,18 +83,19 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="London,UK" />
 
-                <info.androidhive.fontawesome.FontTextView
-                    android:id="@+id/description_icon_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fa_cloud_sun_solid"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/largest_text_size"
+                <ImageView
+                    android:id="@+id/iconImage"
+                    android:layout_width="@dimen/large_icon_dimen"
+                    android:layout_height="@dimen/large_icon_dimen"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitXY"
+                    app:iconName="@{data.icon}"
                     app:layout_constraintBottom_toTopOf="@id/description_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/title_text"
-                    app:solid_icon="true" />
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_info" />
 
                 <TextView
                     android:id="@+id/description_text"

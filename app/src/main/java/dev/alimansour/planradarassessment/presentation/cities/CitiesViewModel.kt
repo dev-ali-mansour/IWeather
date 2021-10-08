@@ -3,16 +3,21 @@ package dev.alimansour.planradarassessment.presentation.cities
 import androidx.lifecycle.*
 import dev.alimansour.planradarassessment.data.mappers.CityMapper
 import dev.alimansour.planradarassessment.domain.model.CityData
-import dev.alimansour.planradarassessment.domain.repository.WeatherRepository
+import dev.alimansour.planradarassessment.domain.usecase.city.AddCityUseCase
+import dev.alimansour.planradarassessment.domain.usecase.city.GetCitiesUseCase
 import dev.alimansour.planradarassessment.util.Resource
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class CitiesViewModel(private val repository: WeatherRepository) : ViewModel() {
+class CitiesViewModel(
+    private val getCitiesUseCase: GetCitiesUseCase,
+    private val addCityUseCase: AddCityUseCase
+) : ViewModel() {
 
     private val _citiesData = MutableLiveData<Resource<List<CityData>>>()
     val citiesData: LiveData<Resource<List<CityData>>>
@@ -20,7 +25,7 @@ class CitiesViewModel(private val repository: WeatherRepository) : ViewModel() {
 
     fun addCity(cityName: String) {
         viewModelScope.launch {
-            repository.addCity(cityName)
+            addCityUseCase.execute(cityName)
             getCities()
         }
     }
@@ -31,7 +36,7 @@ class CitiesViewModel(private val repository: WeatherRepository) : ViewModel() {
             runCatching {
                 _citiesData.postValue(
                     Resource.success(
-                        CityMapper.mapFromEntity(repository.getCities())
+                        CityMapper.mapFromEntity(getCitiesUseCase.execute())
                     )
                 )
             }.onFailure { t ->
@@ -42,12 +47,15 @@ class CitiesViewModel(private val repository: WeatherRepository) : ViewModel() {
     }
 }
 
-class CitiesViewModelFactory(private val repository: WeatherRepository) :
+class CitiesViewModelFactory @Inject constructor(
+    private val getCitiesUseCase: GetCitiesUseCase,
+    private val addCityUseCase: AddCityUseCase
+) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CitiesViewModel::class.java)) {
-            return CitiesViewModel(repository) as T
+            return CitiesViewModel(getCitiesUseCase, addCityUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

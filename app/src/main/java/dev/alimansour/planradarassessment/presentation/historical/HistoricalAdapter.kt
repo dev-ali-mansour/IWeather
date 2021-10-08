@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.planradarassessment.databinding.ItemHistoricalBinding
+import dev.alimansour.planradarassessment.domain.model.CityData
 import dev.alimansour.planradarassessment.domain.model.HistoricalData
 import dev.alimansour.planradarassessment.presentation.details.DetailsActivity
+import javax.inject.Inject
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class HistoricalAdapter(private val list: List<HistoricalData?>) :
+class HistoricalAdapter @Inject constructor() :
     RecyclerView.Adapter<HistoricalAdapter.AccountViewHolder>() {
+    private lateinit var list: List<HistoricalData>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding: ItemHistoricalBinding = ItemHistoricalBinding.inflate(
@@ -40,6 +43,15 @@ class HistoricalAdapter(private val list: List<HistoricalData?>) :
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    /**
+     * Set Historical data list
+     * @param historicalList List of Historical Data
+     */
+    fun setHistoricalList(historicalList: List<HistoricalData>) {
+        this.list = historicalList
+        notifyDataSetChanged()
     }
 
     inner class AccountViewHolder(val binding: ItemHistoricalBinding) :
