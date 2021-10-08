@@ -1,6 +1,13 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="horizontal_normal_dimen">16dp</dimen>
+    <dimen name="normal_margin">16dp</dimen>
+    <dimen name="big_margin">32dp</dimen>
+    <dimen name="long_margin">45dp</dimen>
     <dimen name="small_icon_dimen">24dp</dimen>
-    <dimen name="small_text_size">18sp</dimen>
+    <dimen name="tiny_text_size">14sp</dimen>
+    <dimen name="small_text_size">16sp</dimen>
+    <dimen name="medium_text_size">20sp</dimen>
+    <dimen name="large_text_size">24sp</dimen>
+    <dimen name="largest_text_size">76sp</dimen>
+    <dimen name="app_bar_size">150dp</dimen>
 </resources>

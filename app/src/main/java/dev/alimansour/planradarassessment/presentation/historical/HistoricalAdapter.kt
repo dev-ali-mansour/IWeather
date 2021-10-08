@@ -1,22 +1,23 @@
-package dev.alimansour.planradarassessment.presentation.cities
+package dev.alimansour.planradarassessment.presentation.historical
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import dev.alimansour.planradarassessment.databinding.ItemCityBinding
-import dev.alimansour.planradarassessment.domain.model.LocationData
+import dev.alimansour.planradarassessment.databinding.ItemHistoricalBinding
+import dev.alimansour.planradarassessment.domain.model.HistoricalData
+import dev.alimansour.planradarassessment.presentation.details.DetailsActivity
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class CitiesAdapter(private val list: List<LocationData>) :
-    RecyclerView.Adapter<CitiesAdapter.AccountViewHolder>() {
+class HistoricalAdapter(private val list: List<HistoricalData?>) :
+    RecyclerView.Adapter<HistoricalAdapter.AccountViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
-        val binding: ItemCityBinding = ItemCityBinding.inflate(
+        val binding: ItemHistoricalBinding = ItemHistoricalBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return AccountViewHolder(binding)
@@ -24,13 +25,13 @@ class CitiesAdapter(private val list: List<LocationData>) :
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
         try {
-            val city = list[position]
-            holder.binding.cityName.text = city.title
+            val historicalData = list[position]
+            holder.binding.data = historicalData
+
             holder.itemView.setOnClickListener {
-                val action =
-                    CitiesFragmentDirections.actionCitiesFragmentToHistoricalFragment(city.name)
-                Navigation.findNavController(holder.binding.root)
-                    .navigate(action)
+                val intent = Intent(it.context, DetailsActivity::class.java)
+                intent.putExtra("data", historicalData)
+                it.context.startActivity(intent)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -41,6 +42,6 @@ class CitiesAdapter(private val list: List<LocationData>) :
         return list.size
     }
 
-    inner class AccountViewHolder(val binding: ItemCityBinding) :
+    inner class AccountViewHolder(val binding: ItemHistoricalBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

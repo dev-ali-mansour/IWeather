@@ -1,4 +1,4 @@
-package dev.alimansour.planradarassessment.presentation
+package dev.alimansour.planradarassessment.presentation.cities
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.alimansour.planradarassessment.databinding.FragmentCitiesBinding
 import dev.alimansour.planradarassessment.domain.model.LocationData
-import dev.alimansour.planradarassessment.presentation.cities.CitiesAdapter
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -32,9 +31,9 @@ class CitiesFragment : Fragment() {
 
         citiesAdapter = CitiesAdapter(
             listOf(
-                LocationData("London", "UK", 20.0, "Cloudy", 0.45, 20),
-                LocationData("Paris", "FR", 20.0, "Cloudy", 0.45, 20),
-                LocationData("Vienna", "AUT", 20.0, "Cloudy", 0.45, 20),
+                LocationData("London", "UK"),
+                LocationData("Paris", "FR"),
+                LocationData("Vienna", "AUT"),
              )
         )
         binding.citiesRecyclerView.apply {
@@ -42,7 +41,6 @@ class CitiesFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = citiesAdapter
         }
-
 
         return binding.root
     }

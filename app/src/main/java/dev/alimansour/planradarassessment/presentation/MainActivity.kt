@@ -1,6 +1,7 @@
 package dev.alimansour.planradarassessment.presentation
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -36,8 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
 
 
         val navHostFragment = supportFragmentManager
@@ -52,8 +52,11 @@ class MainActivity : AppCompatActivity() {
             )
             if (destination.id == R.id.CitiesFragment) {
                 params.setMargins(90.dp, 90.dp, 0.dp, 0.dp)
+                binding.fab.visibility = View.VISIBLE
+
             } else {
                 params.setMargins(0.dp, 90.dp, 0.dp, 0.dp)
+                binding.fab.visibility = View.GONE
             }
             binding.toolbarTitle.layoutParams = params
             toolbarTitle = destination.label.toString()
@@ -62,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            navController.navigate(R.id.action_CitiesFragment_to_HistoricalFragment)
         }
     }
 

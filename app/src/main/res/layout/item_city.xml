@@ -1,46 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
  WeatherApp Android Application developed by: Ali Mansour
  ################# WeatherApp IS FREE SOFTWARE ###################
  https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
 -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/horizontal_normal_dimen"
-    android:paddingVertical="@dimen/horizontal_normal_dimen">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/city_icon"
-        android:layout_width="@dimen/small_icon_dimen"
-        android:layout_height="@dimen/small_icon_dimen"
-        android:contentDescription="@string/city_icon_image"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_location_city"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/city_name"
-        android:layout_width="wrap_content"
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:fontFamily="@font/lato_bold"
-        android:textColor="@color/black"
-        android:textSize="@dimen/small_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/city_icon"
-        app:layout_constraintStart_toEndOf="@id/city_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="London, UK" />
+        android:paddingHorizontal="@dimen/normal_margin"
+        android:paddingVertical="@dimen/normal_margin">
 
-    <ImageView
-        android:id="@+id/info_icon"
-        android:layout_width="@dimen/small_icon_dimen"
-        android:layout_height="@dimen/small_icon_dimen"
-        android:contentDescription="@string/info_icon"
-        android:src="@drawable/ic_info"
-        app:layout_constraintBottom_toBottomOf="@id/city_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/city_icon" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/city_icon"
+            android:layout_width="@dimen/small_icon_dimen"
+            android:layout_height="@dimen/small_icon_dimen"
+            android:contentDescription="@string/city_icon_image"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_location_city"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:fontFamily="@font/lato_black"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/city_icon"
+            app:layout_constraintStart_toEndOf="@id/city_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="London, UK" />
+
+        <ImageView
+            android:id="@+id/info_icon"
+            android:layout_width="@dimen/small_icon_dimen"
+            android:layout_height="@dimen/small_icon_dimen"
+            android:contentDescription="@string/info_icon"
+            android:src="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="@id/city_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/city_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

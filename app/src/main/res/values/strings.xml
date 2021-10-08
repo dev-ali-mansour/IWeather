@@ -14,4 +14,19 @@
     <string name="back_image_description">Back Image includes left arrow. tap on it to go back</string>
     <string name="city_icon_image">City icon image</string>
     <string name="info_icon">Info icon</string>
+    <string name="details_fragment_label">Details</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="description">Description</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">WindSpeed</string>
+    <string name="degree">%1$s °C</string>
+    <string name="description_degree">%1$s, %2$s °C</string>
+    <string name="percent">%1$s %%</string>
+    <string name="speed">%1$s km/h</string>
+    <string name="weather_time">Weather information for London received on \n%1$s</string>
+
 </resources>

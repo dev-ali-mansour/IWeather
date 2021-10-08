@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ WeatherApp Android Application developed by: Ali Mansour
+ ################# WeatherApp IS FREE SOFTWARE ###################
+ https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
+-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="dev.alimansour.planradarassessment.domain.model.HistoricalData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/normal_margin"
+        android:paddingVertical="@dimen/normal_margin">
+
+        <info.androidhive.fontawesome.FontTextView
+            android:id="@+id/description_icon_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.icon}"
+            android:textColor="@color/colorPrimary"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:solid_icon="true" />
+
+        <TextView
+            android:id="@+id/date_time_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_icon_dimen"
+            android:fontFamily="@font/lato_black"
+            android:textSize="@dimen/tiny_text_size"
+            app:date="@{data.date}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/description_icon_text"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="01.10.2019 - 16:58" />
+
+        <TextView
+            android:id="@+id/description_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_black"
+            android:text="@{@string/description_degree(data.description, data.temperature)}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintEnd_toEndOf="@id/date_time_text"
+            app:layout_constraintStart_toStartOf="@id/date_time_text"
+            app:layout_constraintTop_toBottomOf="@id/date_time_text"
+            tools:text="Cloudy,14°C" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

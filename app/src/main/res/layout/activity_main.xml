@@ -4,57 +4,64 @@
  ################# WeatherApp IS FREE SOFTWARE ###################
  https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
 -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <data>
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:theme="@style/Theme.PlanRadarAssessment.AppBarOverlay">
+        android:layout_height="match_parent"
+        tools:context=".presentation.MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"
-            android:elevation="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:popupTheme="@style/Theme.PlanRadarAssessment.PopupOverlay"
-            app:titleTextAppearance="@style/Toolbar.TitleText">
+            android:layout_height="@dimen/app_bar_size"
+            android:theme="@style/Theme.PlanRadarAssessment.AppBarOverlay">
 
-            <TextView
-                android:id="@+id/toolbar_title"
-                style="@style/CustomToolbarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="65dp"
-                android:layout_marginBottom="45dp"
-                android:maxLines="1"
-                android:textColor="@color/white"
-                android:visibility="visible"
-                tools:text="App title" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimary"
+                android:elevation="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:popupTheme="@style/Theme.PlanRadarAssessment.PopupOverlay"
+                app:titleTextAppearance="@style/Toolbar.TitleText">
 
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    style="@style/CustomToolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginBottom="45dp"
+                    android:maxLines="1"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    tools:text="App title" />
 
-    <include layout="@layout/content_main" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        android:text="@string/add_city"
-        android:textColor="@color/white"
-        app:icon="@drawable/ic_baseline_add_24"
-        app:iconTint="@color/white" />
+        <include layout="@layout/content_main" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="16dp"
+            android:text="@string/add_city"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_baseline_add_24"
+            app:iconTint="@color/white" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
