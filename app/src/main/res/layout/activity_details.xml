@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="dev.alimansour.planradarassessment.domain.model.HistoricalData" />
+            type="dev.alimansour.iweather.domain.model.HistoricalData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -197,11 +197,15 @@
             android:id="@+id/date_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="219dp"
             android:layout_marginBottom="@dimen/normal_margin"
             android:text="@{@string/weather_time(data.date)}"
             android:textAlignment="center"
+            android:textColor="@color/ColorDate"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background_image"
+            tools:text="Weather information for London received on \n2021-10-09 06:00:00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

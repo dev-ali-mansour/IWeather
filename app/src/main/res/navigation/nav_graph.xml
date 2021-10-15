@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/CitiesFragment"
-        android:name="dev.alimansour.planradarassessment.presentation.cities.CitiesFragment"
+        android:name="dev.alimansour.iweather.presentation.cities.CitiesFragment"
         android:label="@string/cities_fragment_label"
         tools:layout="@layout/fragment_cities">
 
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/HistoricalFragment"
-        android:name="dev.alimansour.planradarassessment.presentation.historical.HistoricalFragment"
+        android:name="dev.alimansour.iweather.presentation.historical.HistoricalFragment"
         android:label="@string/historical_fragment_label"
         tools:layout="@layout/fragment_historical">
         <argument
