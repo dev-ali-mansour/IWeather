@@ -1,20 +1,27 @@
-# Android Weather Application
+# IWeather Android Application
 
-This project is a solution for Android Role assignment for an company.
-
-User can search for a specific city, then the application will search for it's weather data, and cache it for offline usage.
-The application require the internet connection while searching for and adding a new city. Then data will be cached on the device.
-
+This project was created at first as a solution for an assessment for Android developer role in a company. Then I decided to continue updating it using the latest tools and techniques.<br/>
+You can use it as a reference for using the tools described at the end of this file.<br/>
+If you want to contribute to this repository by reviewing my code, refactor it, or add new features, You are almost welcomed.
 ## Screenshots
 
-<img src="https://i.ibb.co/BgdFk2t/Screenshot-2021-10-08-17-54-15-88-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/Drr6nKJ/Screenshot-2021-10-08-17-57-56-62-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/jT06nKt/Screenshot-2021-10-08-17-58-29-55-9f89676b8b215e1e3984633e34501759.jpg" width="200"> <img src="https://i.ibb.co/xFd8Sv7/Screenshot-2021-10-08-17-58-42-11-9f89676b8b215e1e3984633e34501759.jpg" width="200">
+<img src="https://i.ibb.co/BgdFk2t/Screenshot-2021-10-08-17-54-15-88-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/Drr6nKJ/Screenshot-2021-10-08-17-57-56-62-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/jT06nKt/Screenshot-2021-10-08-17-58-29-55-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/xFd8Sv7/Screenshot-2021-10-08-17-58-42-11-9f89676b8b215e1e3984633e34501759.jpg" width="200">
 
-## How to use
+## Installation
 
 * First you need to create an account on [OpenWeatherMap](https://www.openweathermap.org)
 * Then you need to create an API Key.
-* In your local.properties file enter the code below:<br>
+* In your local.properties file enter the code below:<br/>
 apiKey = {YOUR_API_KEY}
+
+## How to use
+* Please check that your device is connected to the internet.
+* Tap on Add City button.
+* Enter city name, Country code as shown in the screenshots above.
+* Then city with it's related historical data will be cached in your device. So you can access it later without needing to internet connection.
+* You can add cities as much as you want.
+* Tab on your city name, then it will navigate to city historical screen.
+* Tab on an item from the historical data items to navigate to the details screen.
 
 
 ## Built With
