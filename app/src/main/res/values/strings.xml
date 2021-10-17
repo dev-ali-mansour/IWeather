@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PlanRadarAssessment</string>
+    <string name="app_name">IWeather</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="cities_fragment_label">Cities</string>
