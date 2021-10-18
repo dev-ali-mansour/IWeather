@@ -1,7 +1,7 @@
 package dev.alimansour.iweather.data.remote
 
 import dev.alimansour.iweather.data.remote.response.HistoricalResponse
-import dev.alimansour.iweather.util.Resource
+import retrofit2.Response
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -15,5 +15,5 @@ interface RemoteDataSource {
      * @param cityName City Name
      * @return Resource<HistoricalResponse>
      */
-    suspend fun fetchHistoricalData(cityName: String): Resource<HistoricalResponse>
+    suspend fun fetchHistoricalData(cityName: String): Response<HistoricalResponse>
 }

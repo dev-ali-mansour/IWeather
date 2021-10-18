@@ -1,6 +1,5 @@
 package dev.alimansour.iweather.presentation.cities
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentCitiesBinding
-import dev.alimansour.iweather.presentation.MyApplication
-import dev.alimansour.iweather.util.Status
+import dev.alimansour.iweather.util.Resource
 import javax.inject.Inject
 
 /**
@@ -46,7 +44,7 @@ class CitiesFragment : Fragment() {
             adapter = citiesAdapter
 
             viewModel.citiesData.observe(viewLifecycleOwner, { resource ->
-                if (resource.status == Status.SUCCESS) {
+                if (resource is Resource.Success) {
                     resource.data?.let { list ->
                         if (list.isNotEmpty()) {
                             citiesAdapter.setCitiesList(list)

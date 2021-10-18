@@ -27,10 +27,10 @@ class HistoricalViewModel(
      */
     fun getHistoricalDataList(cityId: Int) {
         viewModelScope.launch {
-            _historicalData.value = Resource.loading(null)
+            _historicalData.value = Resource.Loading(null)
             runCatching {
                 _historicalData.postValue(
-                    Resource.success(
+                    Resource.Success(
                         HistoricalMapper.mapFromEntity(
                             getHistoricalDataUseCase.execute(cityId)
                         )
@@ -38,7 +38,7 @@ class HistoricalViewModel(
                 )
             }.onFailure { t ->
                 val message = t.message ?: "Error on loading historical data"
-                _historicalData.value = Resource.error(message, null, null)
+                _historicalData.value = Resource.Error(message, null)
             }
         }
     }

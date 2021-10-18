@@ -4,9 +4,12 @@ import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
 import dev.alimansour.iweather.data.remote.RemoteDataSource
+import dev.alimansour.iweather.data.remote.response.HistoricalResponse
 import dev.alimansour.iweather.domain.repository.WeatherRepository
+import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import timber.log.Timber
 
 /**
@@ -23,7 +26,7 @@ class WeatherRepositoryImpl(
         withContext(Dispatchers.IO) {
             runCatching {
                 val dataList = ArrayList<Historical>()
-                val resource = remoteDataSource.fetchHistoricalData(cityName)
+                val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
                 resource.data?.let { response ->
                     val city = City(
                         response.city.id,
@@ -50,8 +53,6 @@ class WeatherRepositoryImpl(
                         localDataSource.addHistoricalData(dataList)
                     }
                 }
-
-
             }.onFailure { t -> Timber.e(t.message) }
         }
     }
@@ -63,4 +64,14 @@ class WeatherRepositoryImpl(
 
     override suspend fun getHistoricalData(id: Int): List<Historical> =
         localDataSource.getHistoricalData(id)
+
+    private fun responseToResource(response: Response<HistoricalResponse>): Resource<HistoricalResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
 }

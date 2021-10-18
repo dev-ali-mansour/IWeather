@@ -14,13 +14,15 @@ interface WeatherRepository {
      * Add city data to database
      * @param cityName City Name
      */
-    suspend fun addCity(cityName:String)
+    suspend fun addCity(cityName: String)
 
     /**
+     * Todo Return Flow
      * Retrieve city list from database
      * @return Resource<List<City>>
      */
     suspend fun getCities(): List<City>
+
     /**
      * Add list of historical data to database
      * @param list List of Historical
@@ -28,6 +30,7 @@ interface WeatherRepository {
     suspend fun addHistoricalData(list: List<Historical>)
 
     /**
+     * Todo Return Flow
      * Fetch historical weather data for specific city
      * @param id City Id
      * @return List<Historical>

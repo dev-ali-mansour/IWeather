@@ -31,17 +31,17 @@ class CitiesViewModel(
     }
 
     fun getCities() {
-        _citiesData.value = Resource.loading(null)
+        _citiesData.value = Resource.Loading(null)
         viewModelScope.launch {
             runCatching {
                 _citiesData.postValue(
-                    Resource.success(
+                    Resource.Success(
                         CityMapper.mapFromEntity(getCitiesUseCase.execute())
                     )
                 )
             }.onFailure { t ->
                 val message = t.message ?: "Error on loading historical data"
-                _citiesData.value = Resource.error(message, null, null)
+                _citiesData.value = Resource.Error(message, null)
             }
         }
     }

@@ -21,13 +21,16 @@ interface LocalDataSource {
      * @return Resource<List<City>>
      */
     suspend fun getCities(): List<City>
+
     /**
+     * Todo Return Flow
      * Add list of historical data to database
      * @param list List of Historical
      */
     suspend fun addHistoricalData(list: List<Historical>)
 
     /**
+     * Todo Return Flow
      * Get historical weather data for specific city
      * @param id City Id
      * @return CityAndHistorical

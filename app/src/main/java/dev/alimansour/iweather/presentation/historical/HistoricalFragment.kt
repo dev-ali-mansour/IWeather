@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
-import dev.alimansour.iweather.presentation.MyApplication
-import dev.alimansour.iweather.util.Status
+import dev.alimansour.iweather.util.Resource
 import javax.inject.Inject
 
 /**
@@ -52,7 +51,7 @@ class HistoricalFragment : Fragment() {
             adapter = historicalAdapter
 
             viewModel.historicalData.observe(viewLifecycleOwner, { resource ->
-                if (resource.status == Status.SUCCESS) {
+                if (resource is Resource.Success) {
                     resource.data?.let { list ->
                         if (list.isNotEmpty()) {
                             historicalAdapter.setHistoricalList(list)
