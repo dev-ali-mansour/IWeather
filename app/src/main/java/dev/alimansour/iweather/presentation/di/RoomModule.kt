@@ -1,9 +1,12 @@
-package dev.alimansour.iweather.presentation.dp
+package dev.alimansour.iweather.presentation.di
 
 import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dev.alimansour.iweather.data.local.WeatherDatabase
 import dev.alimansour.iweather.data.local.dao.CityDao
 import dev.alimansour.iweather.data.local.dao.HistoricalDao
@@ -15,11 +18,12 @@ import javax.inject.Singleton
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Module
+@InstallIn(SingletonComponent::class)
 object RoomModule {
 
     @Singleton
     @Provides
-    fun provideWeatherDatabase(@AppContext context: Context): WeatherDatabase {
+    fun provideWeatherDatabase(@ApplicationContext context: Context): WeatherDatabase {
         return Room.databaseBuilder(
             context,
             WeatherDatabase::class.java,

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.presentation.MyApplication
@@ -18,6 +19,7 @@ import javax.inject.Inject
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
+@AndroidEntryPoint
 class HistoricalFragment : Fragment() {
 
     private var _binding: FragmentHistoricalBinding? = null
@@ -31,19 +33,6 @@ class HistoricalFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        runCatching {
-            // Inject fragment to MainComponent
-            (requireActivity().application as MyApplication).appComponent
-                .mainComponentBuilder()
-                .context(requireContext())
-                .activity(requireActivity())
-                .build()
-                .inject(this)
-        }.onFailure { it.printStackTrace() }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

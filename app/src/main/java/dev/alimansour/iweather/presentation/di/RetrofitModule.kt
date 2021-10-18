@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.presentation.dp
+package dev.alimansour.iweather.presentation.di
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dev.alimansour.iweather.BuildConfig
 import dev.alimansour.iweather.data.remote.WeatherAPIService
 import okhttp3.Interceptor
@@ -23,6 +25,7 @@ import javax.inject.Singleton
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Module
+@InstallIn(SingletonComponent::class)
 object RetrofitModule {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
     private const val API_KEY = BuildConfig.API_KEY

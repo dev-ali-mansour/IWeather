@@ -1,9 +1,11 @@
-package dev.alimansour.iweather.presentation.dp
+package dev.alimansour.iweather.presentation.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dev.alimansour.iweather.presentation.cities.CitiesViewModel
 import dev.alimansour.iweather.presentation.cities.CitiesViewModelFactory
 import dev.alimansour.iweather.presentation.historical.HistoricalViewModel
@@ -15,10 +17,9 @@ import dev.alimansour.iweather.presentation.historical.HistoricalViewModelFactor
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Module
+@InstallIn(ActivityComponent::class)
 object MainModule {
 
-
-    @MainScope
     @Provides
     fun provideCitiesViewModel(
         activity: FragmentActivity,
@@ -28,7 +29,6 @@ object MainModule {
             .get(CitiesViewModel::class.java)
     }
 
-    @MainScope
     @Provides
     fun provideHistoricalViewModelFactory(
         activity: FragmentActivity,

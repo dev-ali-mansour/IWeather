@@ -13,6 +13,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.ActivityMainBinding
 import dev.alimansour.iweather.databinding.SearchBottomSheetBinding
@@ -28,6 +29,8 @@ import javax.inject.Inject
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -36,16 +39,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModel: CitiesViewModel
 
-    /* private val viewModel: CitiesViewModel by lazy {
-         val remoteDataSource: RemoteDataSource = RemoteDataSourceImpl(WeatherApi.retrofitService)
-         val database = WeatherDatabase.getInstance(applicationContext)
-         val localDataSource: LocalDataSource = LocalDataSourceImpl(database)
-         val repository: WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource)
-         val viewModelFactory = CitiesViewModelFactory(repository)
-
-         ViewModelProvider(this, viewModelFactory).get(CitiesViewModel::class.java)
-     }
- */
     var toolbarTitle: String
         get() = binding.toolbarTitle.text.toString()
         set(value) {
@@ -54,13 +47,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (application as MyApplication).appComponent
-            .mainComponentBuilder()
-            .context(this)
-            .activity(this)
-            .build()
-            .inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

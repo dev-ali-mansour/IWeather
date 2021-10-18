@@ -1,7 +1,9 @@
-package dev.alimansour.iweather.presentation.dp
+package dev.alimansour.iweather.presentation.di
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.LocalDataSourceImpl
 import dev.alimansour.iweather.data.local.WeatherDatabase
@@ -17,7 +19,8 @@ import javax.inject.Singleton
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-@Module(subcomponents = [MainComponent::class])
+@Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Singleton
@@ -40,12 +43,4 @@ object AppModule {
     ): WeatherRepository {
         return WeatherRepositoryImpl(remoteDataSource, localDataSource)
     }
-
-
-    /*@Singleton
-    @Provides
-    fun provideCountriesAdapter(@AppContext context: Context): CountriesAdapter {
-        return CountriesAdapter(context, android.R.layout.simple_list_item_1)
-    }*/
-
 }

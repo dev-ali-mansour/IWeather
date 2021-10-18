@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentCitiesBinding
 import dev.alimansour.iweather.presentation.MyApplication
 import dev.alimansour.iweather.util.Status
@@ -17,6 +18,7 @@ import javax.inject.Inject
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
+@AndroidEntryPoint
 class CitiesFragment : Fragment() {
 
     private var _binding: FragmentCitiesBinding? = null
@@ -30,19 +32,6 @@ class CitiesFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        runCatching {
-            // Inject fragment to MainComponent
-            (requireActivity().application as MyApplication).appComponent
-                .mainComponentBuilder()
-                .context(requireContext())
-                .activity(requireActivity())
-                .build()
-                .inject(this)
-        }.onFailure { it.printStackTrace() }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
