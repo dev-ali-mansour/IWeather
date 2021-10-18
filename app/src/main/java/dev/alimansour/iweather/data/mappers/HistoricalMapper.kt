@@ -4,13 +4,16 @@ import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.model.HistoricalData
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-object HistoricalMapper : Mapper<List<Historical>, List<HistoricalData>> {
+@Singleton
+class HistoricalMapper @Inject constructor() : Mapper<List<Historical>, List<HistoricalData>> {
 
     override fun mapFromEntity(type: List<Historical>): List<HistoricalData> {
         val data = mutableListOf<HistoricalData>()

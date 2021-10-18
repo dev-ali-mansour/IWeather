@@ -16,7 +16,8 @@ import javax.inject.Inject
  */
 class CitiesViewModel(
     private val getCitiesUseCase: GetCitiesUseCase,
-    private val addCityUseCase: AddCityUseCase
+    private val addCityUseCase: AddCityUseCase,
+    private val cityMapper: CityMapper
 ) : ViewModel() {
 
     private val _citiesData = MutableLiveData<Resource<List<CityData>>>()
@@ -36,7 +37,7 @@ class CitiesViewModel(
             runCatching {
                 _citiesData.postValue(
                     Resource.Success(
-                        CityMapper.mapFromEntity(getCitiesUseCase.execute())
+                        cityMapper.mapFromEntity(getCitiesUseCase.execute())
                     )
                 )
             }.onFailure { t ->
@@ -49,13 +50,14 @@ class CitiesViewModel(
 
 class CitiesViewModelFactory @Inject constructor(
     private val getCitiesUseCase: GetCitiesUseCase,
-    private val addCityUseCase: AddCityUseCase
+    private val addCityUseCase: AddCityUseCase,
+    private val cityMapper: CityMapper
 ) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CitiesViewModel::class.java)) {
-            return CitiesViewModel(getCitiesUseCase, addCityUseCase) as T
+            return CitiesViewModel(getCitiesUseCase, addCityUseCase, cityMapper) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

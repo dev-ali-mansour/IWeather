@@ -14,7 +14,8 @@ import javax.inject.Inject
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 class HistoricalViewModel(
-    private val getHistoricalDataUseCase: GetHistoricalDataUseCase
+    private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
+    private val historicalMapper: HistoricalMapper
 ) : ViewModel() {
 
     private val _historicalData = MutableLiveData<Resource<List<HistoricalData>>>()
@@ -31,7 +32,7 @@ class HistoricalViewModel(
             runCatching {
                 _historicalData.postValue(
                     Resource.Success(
-                        HistoricalMapper.mapFromEntity(
+                        historicalMapper.mapFromEntity(
                             getHistoricalDataUseCase.execute(cityId)
                         )
                     )
@@ -44,12 +45,15 @@ class HistoricalViewModel(
     }
 }
 
-class HistoricalViewModelFactory @Inject constructor(private val getHistoricalDataUseCase: GetHistoricalDataUseCase) :
+class HistoricalViewModelFactory @Inject constructor(
+    private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
+    private val historicalMapper: HistoricalMapper
+) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HistoricalViewModel::class.java)) {
-            return HistoricalViewModel(getHistoricalDataUseCase) as T
+            return HistoricalViewModel(getHistoricalDataUseCase, historicalMapper) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
