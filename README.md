@@ -11,8 +11,8 @@ If you want to contribute to this repository by reviewing my code, refactor it, 
 
 * First you need to create an account on [OpenWeatherMap](https://www.openweathermap.org)
 * Then you need to create an API Key.
-* In your local.properties file enter the code below:<br/>
-apiKey = {YOUR_API_KEY}
+* In your gradle.properties file enter the code below:<br/>
+apiKey = "{YOUR_API_KEY}"
 
 ## How to use
 * Please check that your device is connected to the internet.

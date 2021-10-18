@@ -7,9 +7,6 @@ plugins {
     id "dagger.hilt.android.plugin"
 }
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
 android {
     compileSdk 30
 
@@ -19,6 +16,7 @@ android {
         targetSdk 30
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        buildConfigField("String", "API_KEY", apiKey)
         versionCode 1
         versionName "1.0"
 
@@ -26,11 +24,7 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "API_KEY", "\"" + localProperties["apiKey"] + "\"")
-        }
         release {
-            buildConfigField("String", "API_KEY", "\"" + localProperties["apiKey"] + "\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
