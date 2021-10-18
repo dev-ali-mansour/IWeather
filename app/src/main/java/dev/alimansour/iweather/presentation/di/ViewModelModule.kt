@@ -18,7 +18,7 @@ import dev.alimansour.iweather.presentation.historical.HistoricalViewModelFactor
  */
 @Module
 @InstallIn(ActivityComponent::class)
-object MainModule {
+object ViewModelModule {
 
     @Provides
     fun provideCitiesViewModel(
@@ -30,7 +30,7 @@ object MainModule {
     }
 
     @Provides
-    fun provideHistoricalViewModelFactory(
+    fun provideHistoricalViewModel(
         activity: FragmentActivity,
         historicalViewModelFactory: HistoricalViewModelFactory
     ): HistoricalViewModel {
