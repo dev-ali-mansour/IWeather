@@ -3,6 +3,7 @@ package dev.alimansour.iweather.data.mappers
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.domain.model.CityData
+import org.junit.Before
 
 import org.junit.Test
 
@@ -12,19 +13,25 @@ import org.junit.Test
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 class CityMapperTest {
-    private val cityMapper = CityMapper()
+    private lateinit var cityMapper: CityMapper
+    private lateinit var cityList: List<City>
+    private lateinit var cityDataList: List<CityData>
 
-    @Test
-    fun mapFromEntity_UsingListOfCity_returnListOfCityData() {
-        val cityList: List<City> = listOf(
+    @Before
+    fun setUp() {
+        cityMapper = CityMapper()
+        cityList = listOf(
             City(1, "Cairo", "EG"),
             City(2, "London", "GB")
         )
-        val cityDataList: List<CityData> = listOf(
+        cityDataList = listOf(
             CityData(1, "Cairo", "EG"),
             CityData(2, "London", "GB")
         )
+    }
 
+    @Test
+    fun mapFromEntity_UsingListOfCity_returnListOfCityData() {
         val result = cityMapper.mapFromEntity(cityList)
 
         assertThat(result).isEqualTo(cityDataList)
@@ -32,15 +39,6 @@ class CityMapperTest {
 
     @Test
     fun mapToEntity_usingListOfCityData_returnListOfCity() {
-        val cityList: List<City> = listOf(
-            City(1, "Cairo", "EG"),
-            City(2, "London", "GB")
-        )
-        val cityDataList: List<CityData> = listOf(
-            CityData(1, "Cairo", "EG"),
-            CityData(2, "London", "GB")
-        )
-
         val result = cityMapper.mapToEntity(cityDataList)
 
         assertThat(result).isEqualTo(cityList)
