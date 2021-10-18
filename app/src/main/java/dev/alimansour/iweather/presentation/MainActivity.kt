@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,6 +19,7 @@ import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.ActivityMainBinding
 import dev.alimansour.iweather.databinding.SearchBottomSheetBinding
 import dev.alimansour.iweather.presentation.cities.CitiesViewModel
+import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.dp
 import dev.alimansour.iweather.util.hideKeyboard
 import dev.alimansour.iweather.util.isConnected
@@ -76,6 +78,22 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        viewModel.isCityAdded.observe(this, { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    viewModel.getCities()
+                }
+                is Resource.Error -> {
+                    Timber.e(resource.message.toString())
+                    Snackbar.make(binding.root, resource.message.toString(), Snackbar.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+        })
+
         binding.fab.setOnClickListener { view ->
             view.visibility = View.GONE
             searchForCity()
@@ -110,19 +128,14 @@ class MainActivity : AppCompatActivity() {
                     TextView.OnEditorActionListener { _, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                             hideKeyboard()
-                            if (isConnected()) {
-                                val cityName = sheetBinding.searchCityEditText.text.toString()
-                                if (cityName.isNotEmpty()) {
-                                    Timber.d("Searching for city: $cityName")
-                                    viewModel.addCity(cityName)
-                                }
-                                sheetDialog.dismiss()
-                            } else {
-                                val message = "You are not connected to internet!"
-                                Timber.e(message)
-                                Snackbar.make(sheetBinding.root, message, Snackbar.LENGTH_LONG)
-                                    .show()
+
+                            val cityName = sheetBinding.searchCityEditText.text.toString()
+                            if (cityName.isNotEmpty()) {
+                                Timber.d("Searching for city: $cityName")
+                                viewModel.addCity(cityName)
                             }
+                            sheetDialog.dismiss()
+
                             return@OnEditorActionListener true
                         }
                         false
