@@ -11,6 +11,7 @@ import dev.alimansour.iweather.util.isConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -61,6 +62,7 @@ class CitiesViewModel(
     }
 }
 
+@Singleton
 class CitiesViewModelFactory @Inject constructor(
     private val app: Application,
     private val getCitiesUseCase: GetCitiesUseCase,

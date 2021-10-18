@@ -8,6 +8,7 @@ import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -44,6 +45,7 @@ class HistoricalViewModel(
     }
 }
 
+@Singleton
 class HistoricalViewModelFactory @Inject constructor(
     private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
     private val historicalMapper: HistoricalMapper
