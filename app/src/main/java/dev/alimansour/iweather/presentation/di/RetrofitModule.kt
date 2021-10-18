@@ -28,7 +28,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-    private const val API_KEY = BuildConfig.API_KEY
 
     @Singleton
     @Provides
@@ -48,7 +47,7 @@ object RetrofitModule {
             val url = chain.request()
                 .url
                 .newBuilder()
-                .addQueryParameter("appid", API_KEY)
+                .addQueryParameter("appid", BuildConfig.API_KEY)
                 .addQueryParameter("units", "metric")
                 .build()
             val request = chain.request()
