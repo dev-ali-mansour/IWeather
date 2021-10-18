@@ -11,25 +11,15 @@ import kotlinx.coroutines.withContext
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 class LocalDataSourceImpl(private val database: WeatherDatabase) : LocalDataSource {
-    override suspend fun addCity(city: City) {
-        withContext(Dispatchers.IO) {
-            database.cityDao().insert(city)
-        }
-    }
+
+    override suspend fun addCity(city: City) = database.cityDao().insert(city)
 
     override suspend fun getCities(): List<City> =
-        withContext(Dispatchers.IO) {
-            database.cityDao().getCities()
-        }
+        database.cityDao().getCities()
 
-    override suspend fun addHistoricalData(list: List<Historical>) {
-        withContext(Dispatchers.IO) {
-            database.historicalDao().insertList(list)
-        }
-    }
+    override suspend fun addHistoricalData(list: List<Historical>) =
+        database.historicalDao().insertList(list)
 
     override suspend fun getHistoricalData(id: Int): List<Historical> =
-        withContext(Dispatchers.IO) {
-            database.historicalDao().getHistoricalData(id)
-        }
+        database.historicalDao().getHistoricalData(id)
 }

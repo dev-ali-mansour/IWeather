@@ -5,6 +5,7 @@ import dev.alimansour.iweather.data.mappers.HistoricalMapper
 import dev.alimansour.iweather.domain.model.HistoricalData
 import dev.alimansour.iweather.domain.usecase.city.GetHistoricalDataUseCase
 import dev.alimansour.iweather.util.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,21 +27,19 @@ class HistoricalViewModel(
      * Get list of historical data for a city
      * @param cityId City Id
      */
-    fun getHistoricalDataList(cityId: Int) {
-        viewModelScope.launch {
-            _historicalData.value = Resource.Loading(null)
-            runCatching {
-                _historicalData.postValue(
-                    Resource.Success(
-                        historicalMapper.mapFromEntity(
-                            getHistoricalDataUseCase.execute(cityId)
-                        )
+    fun getHistoricalDataList(cityId: Int) = viewModelScope.launch(Dispatchers.IO) {
+        _historicalData.postValue(Resource.Loading(null))
+
+        runCatching {
+            _historicalData.postValue(
+                Resource.Success(
+                    historicalMapper.mapFromEntity(
+                        getHistoricalDataUseCase.execute(cityId)
                     )
                 )
-            }.onFailure { t ->
-                val message = t.message ?: "Error on loading historical data"
-                _historicalData.value = Resource.Error(message, null)
-            }
+            )
+        }.onFailure { t ->
+            _historicalData.value = Resource.Error(t.message.toString(), null)
         }
     }
 }

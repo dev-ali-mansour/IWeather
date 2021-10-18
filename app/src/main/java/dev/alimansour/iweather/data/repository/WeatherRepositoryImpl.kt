@@ -7,8 +7,6 @@ import dev.alimansour.iweather.data.remote.RemoteDataSource
 import dev.alimansour.iweather.data.remote.response.HistoricalResponse
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import dev.alimansour.iweather.util.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 import timber.log.Timber
 
@@ -23,38 +21,36 @@ class WeatherRepositoryImpl(
 ) :
     WeatherRepository {
     override suspend fun addCity(cityName: String) {
-        withContext(Dispatchers.IO) {
-            runCatching {
-                val dataList = ArrayList<Historical>()
-                val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
-                resource.data?.let { response ->
-                    val city = City(
-                        response.city.id,
-                        response.city.name,
-                        response.city.country
-                    )
-                    localDataSource.addCity(city)
-                    response.list?.let { list ->
-                        list.forEach { item ->
-                            dataList.add(
-                                Historical(
-                                    0,
-                                    city,
-                                    item.weather[0].icon,
-                                    item.date,
-                                    item.weather[0].description,
-                                    item.main.temp,
-                                    item.main.humidity,
-                                    item.wind.speed
-                                )
+        runCatching {
+            val dataList = ArrayList<Historical>()
+            val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
+            resource.data?.let { response ->
+                val city = City(
+                    response.city.id,
+                    response.city.name,
+                    response.city.country
+                )
+                localDataSource.addCity(city)
+                response.list?.let { list ->
+                    list.forEach { item ->
+                        dataList.add(
+                            Historical(
+                                0,
+                                city,
+                                item.weather[0].icon,
+                                item.date,
+                                item.weather[0].description,
+                                item.main.temp,
+                                item.main.humidity,
+                                item.wind.speed
                             )
-                        }
-
-                        localDataSource.addHistoricalData(dataList)
+                        )
                     }
+
+                    localDataSource.addHistoricalData(dataList)
                 }
-            }.onFailure { t -> Timber.e(t.message) }
-        }
+            }
+        }.onFailure { t -> Timber.e(t.message) }
     }
 
     override suspend fun getCities(): List<City> = localDataSource.getCities()
@@ -73,5 +69,4 @@ class WeatherRepositoryImpl(
         }
         return Resource.Error(response.message())
     }
-
 }
