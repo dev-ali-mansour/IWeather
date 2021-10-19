@@ -3,8 +3,11 @@ package dev.alimansour.iweather.presentation.historical
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.iweather.databinding.ItemHistoricalBinding
+import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.model.HistoricalData
 import dev.alimansour.iweather.presentation.details.DetailsActivity
 import javax.inject.Inject
@@ -16,7 +19,16 @@ import javax.inject.Inject
  */
 class HistoricalAdapter @Inject constructor() :
     RecyclerView.Adapter<HistoricalAdapter.AccountViewHolder>() {
-    private lateinit var list: List<HistoricalData>
+    private val callback = object : DiffUtil.ItemCallback<HistoricalData>() {
+        override fun areItemsTheSame(oldItem: HistoricalData, newItem: HistoricalData): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: HistoricalData, newItem: HistoricalData): Boolean {
+            return oldItem == newItem
+        }
+    }
+    val differ = AsyncListDiffer(this, callback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding: ItemHistoricalBinding = ItemHistoricalBinding.inflate(
@@ -27,7 +39,7 @@ class HistoricalAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
         try {
-            val historicalData = list[position]
+            val historicalData = differ.currentList[position]
             holder.binding.data = historicalData
 
             holder.itemView.setOnClickListener {
@@ -41,16 +53,7 @@ class HistoricalAdapter @Inject constructor() :
     }
 
     override fun getItemCount(): Int {
-        return list.size
-    }
-
-    /**
-     * Set Historical data list
-     * @param historicalList List of Historical Data
-     */
-    fun setHistoricalList(historicalList: List<HistoricalData>) {
-        this.list = historicalList
-        notifyDataSetChanged()
+        return differ.currentList.size
     }
 
     inner class AccountViewHolder(val binding: ItemHistoricalBinding) :

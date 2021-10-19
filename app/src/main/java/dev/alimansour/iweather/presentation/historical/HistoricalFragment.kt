@@ -1,6 +1,5 @@
 package dev.alimansour.iweather.presentation.historical
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +42,7 @@ class HistoricalFragment : Fragment() {
         (requireActivity() as MainActivity).toolbarTitle = "${city.name}, Historical"
 
         _binding = FragmentHistoricalBinding.inflate(inflater, container, false)
-        historicalAdapter.setHistoricalList(listOf())
+        historicalAdapter.differ.submitList(listOf())
 
         binding.citiesRecyclerView.apply {
             setHasFixedSize(true)
@@ -54,7 +53,7 @@ class HistoricalFragment : Fragment() {
                 if (resource is Resource.Success) {
                     resource.data?.let { list ->
                         if (list.isNotEmpty()) {
-                            historicalAdapter.setHistoricalList(list)
+                            historicalAdapter.differ.submitList(list)
                             adapter = historicalAdapter
                         }
                     }
