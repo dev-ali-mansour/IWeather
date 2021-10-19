@@ -36,7 +36,7 @@ class CitiesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCitiesBinding.inflate(inflater, container, false)
-        citiesAdapter.setCitiesList(listOf())
+        citiesAdapter.differ.submitList(listOf())
 
         binding.citiesRecyclerView.apply {
             setHasFixedSize(true)
@@ -47,7 +47,7 @@ class CitiesFragment : Fragment() {
                 if (resource is Resource.Success) {
                     resource.data?.let { list ->
                         if (list.isNotEmpty()) {
-                            citiesAdapter.setCitiesList(list)
+                            citiesAdapter.differ.submitList(list)
                             adapter = citiesAdapter
                         }
                     }
