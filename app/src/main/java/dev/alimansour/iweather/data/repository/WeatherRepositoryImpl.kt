@@ -21,7 +21,6 @@ class WeatherRepositoryImpl(
 ) :
     WeatherRepository {
     override suspend fun addCity(cityName: String) {
-        runCatching {
             val dataList = ArrayList<Historical>()
             val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
             resource.data?.let { response ->
@@ -50,7 +49,6 @@ class WeatherRepositoryImpl(
                     localDataSource.addHistoricalData(dataList)
                 }
             }
-        }.onFailure { t -> Timber.e(t.message) }
     }
 
     override suspend fun getCities(): List<City> = localDataSource.getCities()

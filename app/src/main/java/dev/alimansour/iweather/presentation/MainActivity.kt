@@ -81,17 +81,19 @@ class MainActivity : AppCompatActivity() {
         viewModel.isCityAdded.observe(this, { resource ->
             when (resource) {
                 is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
                 }
                 is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
                     viewModel.getCities()
                 }
                 is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
                     Timber.e(resource.message.toString())
                     Snackbar.make(binding.root, resource.message.toString(), Snackbar.LENGTH_LONG)
                         .show()
                 }
             }
-
         })
 
         binding.fab.setOnClickListener { view ->

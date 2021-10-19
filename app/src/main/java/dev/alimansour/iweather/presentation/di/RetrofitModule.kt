@@ -91,18 +91,11 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesRetrofitClient(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
-        Retrofit.Builder()
+       return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(WeatherAPIService::class.java)
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
-            .client(okHttpClient)
             .build()
     }
 
