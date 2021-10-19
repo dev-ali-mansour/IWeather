@@ -199,7 +199,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="219dp"
             android:layout_marginBottom="@dimen/normal_margin"
-            android:text="@{@string/weather_time(data.date)}"
+            android:text="@{@string/weather_time(data.city.name,data.date)}"
             android:textAlignment="center"
             android:textColor="@color/ColorDate"
             app:layout_constraintBottom_toBottomOf="parent"
