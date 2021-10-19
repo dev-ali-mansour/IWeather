@@ -1,11 +1,8 @@
 package dev.alimansour.iweather.presentation
 
-import android.app.Application
-import android.content.Context
-import androidx.multidex.BuildConfig
-import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import dagger.hilt.android.HiltAndroidApp
+import dev.alimansour.iweather.BuildConfig
 import timber.log.Timber
 
 /**
