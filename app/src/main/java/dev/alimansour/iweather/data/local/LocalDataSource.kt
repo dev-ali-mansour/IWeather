@@ -17,6 +17,12 @@ interface LocalDataSource {
     suspend fun addCity(city: City)
 
     /**
+     * Delete saved city and it's historical data from the database
+     * @param city City
+     */
+    suspend fun deleteCity(city: City)
+
+    /**
      * Todo Return Flow
      * Retrieve city list from database
      * @return Resource<List<City>>

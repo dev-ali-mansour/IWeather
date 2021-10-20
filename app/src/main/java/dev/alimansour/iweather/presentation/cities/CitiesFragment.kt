@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.FragmentCitiesBinding
 import dev.alimansour.iweather.util.Resource
 import javax.inject.Inject
@@ -56,6 +60,38 @@ class CitiesFragment : Fragment() {
         }
 
         viewModel.getCities()
+
+        val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.START or ItemTouchHelper.END
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val city = citiesAdapter.differ.currentList[position]
+                viewModel.deleteCity(city)
+                Snackbar.make(
+                    binding.root,
+                    "${city.name}, ${city.country} was deleted successfully!",
+                    Snackbar.LENGTH_LONG
+                ).apply {
+                    setAction(getString(R.string.undo)) {
+                        viewModel.addCity(city.name)
+                    }
+                }.show()
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelperCallBack).apply {
+            attachToRecyclerView(binding.citiesRecyclerView)
+        }
 
         return binding.root
     }

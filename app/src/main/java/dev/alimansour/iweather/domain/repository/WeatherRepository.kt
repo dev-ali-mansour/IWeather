@@ -2,6 +2,7 @@ package dev.alimansour.iweather.domain.repository
 
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
+import dev.alimansour.iweather.domain.model.CityData
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -15,6 +16,12 @@ interface WeatherRepository {
      * @param cityName City Name
      */
     suspend fun addCity(cityName: String)
+
+    /**
+     * Delete saved city and it's historical data from the database
+     * @param city City
+     */
+    suspend fun deleteCity(city: CityData)
 
     /**
      * Todo Return Flow

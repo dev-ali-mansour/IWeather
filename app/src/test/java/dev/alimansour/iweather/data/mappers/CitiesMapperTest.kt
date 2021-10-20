@@ -12,14 +12,14 @@ import org.junit.Test
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class CityMapperTest {
-    private lateinit var cityMapper: CityMapper
+class CitiesMapperTest {
+    private lateinit var citiesMapper: CitiesMapper
     private lateinit var cityList: List<City>
     private lateinit var cityDataList: List<CityData>
 
     @Before
     fun setUp() {
-        cityMapper = CityMapper()
+        citiesMapper = CitiesMapper()
         cityList = listOf(
             City(1, "Cairo", "EG"),
             City(2, "London", "GB")
@@ -32,14 +32,14 @@ class CityMapperTest {
 
     @Test
     fun mapFromEntity_UsingListOfCity_returnListOfCityData() {
-        val result = cityMapper.mapFromEntity(cityList)
+        val result = citiesMapper.mapFromEntity(cityList)
 
         assertThat(result).isEqualTo(cityDataList)
     }
 
     @Test
     fun mapToEntity_usingListOfCityData_returnListOfCity() {
-        val result = cityMapper.mapToEntity(cityDataList)
+        val result = citiesMapper.mapToEntity(cityDataList)
 
         assertThat(result).isEqualTo(cityList)
     }

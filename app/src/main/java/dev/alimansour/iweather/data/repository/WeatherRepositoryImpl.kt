@@ -3,9 +3,11 @@ package dev.alimansour.iweather.data.repository
 import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
+import dev.alimansour.iweather.data.mappers.CityMapper
 import dev.alimansour.iweather.data.remote.RemoteDataSource
 import dev.alimansour.iweather.data.remote.response.HistoricalResponse
 import dev.alimansour.iweather.data.remote.response.WeatherData
+import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import dev.alimansour.iweather.util.Resource
 import retrofit2.Response
@@ -17,7 +19,8 @@ import retrofit2.Response
  */
 class WeatherRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val mapper: CityMapper
 ) :
     WeatherRepository {
     override suspend fun addCity(cityName: String) {
@@ -35,6 +38,9 @@ class WeatherRepositoryImpl(
             }
         }
     }
+
+    override suspend fun deleteCity(city: CityData) =
+        localDataSource.deleteCity(mapper.mapToEntity(city))
 
     override suspend fun getCities(): List<City> = localDataSource.getCities()
 

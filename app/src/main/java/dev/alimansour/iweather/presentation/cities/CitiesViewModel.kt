@@ -3,9 +3,10 @@ package dev.alimansour.iweather.presentation.cities
 import android.app.Application
 import androidx.lifecycle.*
 import dev.alimansour.iweather.R
-import dev.alimansour.iweather.data.mappers.CityMapper
+import dev.alimansour.iweather.data.mappers.CitiesMapper
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.usecase.city.AddCityUseCase
+import dev.alimansour.iweather.domain.usecase.city.DeleteCityUseCase
 import dev.alimansour.iweather.domain.usecase.city.GetCitiesUseCase
 import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.isConnected
@@ -23,7 +24,8 @@ class CitiesViewModel(
     private val app: Application,
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
-    private val cityMapper: CityMapper
+    private val deleteCityUseCase: DeleteCityUseCase,
+    private val citiesMapper: CitiesMapper
 ) : AndroidViewModel(app) {
     private val _isCityAdded = MutableLiveData<Resource<Boolean>>()
     val isCityAdded: LiveData<Resource<Boolean>>
@@ -54,12 +56,17 @@ class CitiesViewModel(
         runCatching {
             _citiesData.postValue(
                 Resource.Success(
-                    cityMapper.mapFromEntity(getCitiesUseCase.execute())
+                    citiesMapper.mapFromEntity(getCitiesUseCase.execute())
                 )
             )
         }.onFailure { t ->
             _citiesData.postValue(Resource.Error(t.message.toString()))
         }
+    }
+
+    fun deleteCity(city: CityData) = viewModelScope.launch(Dispatchers.IO) {
+        deleteCityUseCase.execute(city)
+        getCities()
     }
 }
 
@@ -68,13 +75,20 @@ class CitiesViewModelFactory @Inject constructor(
     private val app: Application,
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
-    private val cityMapper: CityMapper
+    private val deleteCityUseCase: DeleteCityUseCase,
+    private val citiesMapper: CitiesMapper
 ) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CitiesViewModel::class.java)) {
-            return CitiesViewModel(app, getCitiesUseCase, addCityUseCase, cityMapper) as T
+            return CitiesViewModel(
+                app,
+                getCitiesUseCase,
+                addCityUseCase,
+                deleteCityUseCase,
+                citiesMapper
+            ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

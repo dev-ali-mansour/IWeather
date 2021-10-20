@@ -6,7 +6,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,7 +21,6 @@ import dev.alimansour.iweather.presentation.cities.CitiesViewModel
 import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.dp
 import dev.alimansour.iweather.util.hideKeyboard
-import dev.alimansour.iweather.util.isConnected
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+            .findFragmentById(R.id.fragment) as NavHostFragment
         val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
@@ -103,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.fragment)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }

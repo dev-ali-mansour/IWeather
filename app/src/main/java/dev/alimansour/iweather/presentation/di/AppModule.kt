@@ -7,6 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.LocalDataSourceImpl
 import dev.alimansour.iweather.data.local.WeatherDatabase
+import dev.alimansour.iweather.data.local.dao.CityDao
+import dev.alimansour.iweather.data.local.dao.HistoricalDao
+import dev.alimansour.iweather.data.mappers.CityMapper
 import dev.alimansour.iweather.data.remote.RemoteDataSource
 import dev.alimansour.iweather.data.remote.RemoteDataSourceImpl
 import dev.alimansour.iweather.data.remote.WeatherAPIService
@@ -25,22 +28,19 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRemoteDataSource(weatherAPIService: WeatherAPIService): RemoteDataSource {
-        return RemoteDataSourceImpl(weatherAPIService)
-    }
+    fun provideRemoteDataSource(weatherAPIService: WeatherAPIService): RemoteDataSource =
+        RemoteDataSourceImpl(weatherAPIService)
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(weatherDatabase: WeatherDatabase): LocalDataSource {
-        return LocalDataSourceImpl(weatherDatabase)
-    }
+    fun provideLocalDataSource(cityDao: CityDao, historicalDao: HistoricalDao): LocalDataSource =
+        LocalDataSourceImpl(cityDao, historicalDao)
 
     @Singleton
     @Provides
     fun provideWeatherRepository(
         remoteDataSource: RemoteDataSource,
-        localDataSource: LocalDataSource
-    ): WeatherRepository {
-        return WeatherRepositoryImpl(remoteDataSource, localDataSource)
-    }
+        localDataSource: LocalDataSource,
+        cityMapper: CityMapper
+    ): WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource, cityMapper)
 }

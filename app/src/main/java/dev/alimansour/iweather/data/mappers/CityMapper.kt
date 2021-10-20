@@ -11,25 +11,12 @@ import javax.inject.Singleton
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Singleton
-class CityMapper @Inject constructor() : Mapper<List<City>, List<CityData>> {
+class CityMapper @Inject constructor() : Mapper<City, CityData> {
 
-    override fun mapFromEntity(type: List<City>): List<CityData> {
-        val data = mutableListOf<CityData>()
-        type.forEach {
-            data.add(
-                CityData(it.cityId, it.name, it.country)
-            )
-        }
-        return data
-    }
+    override fun mapFromEntity(type: City): CityData =
+        CityData(type.cityId, type.name, type.country)
 
-    override fun mapToEntity(type: List<CityData>): List<City> {
-        val data = mutableListOf<City>()
-        type.forEach {
-            data.add(
-                City(it.id, it.name, it.country)
-            )
-        }
-        return data
-    }
+    override fun mapToEntity(type: CityData): City =
+        City(type.id, type.name, type.country)
+
 }

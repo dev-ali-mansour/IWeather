@@ -31,5 +31,6 @@
     <string name="weather_time">Weather information for %1$s received on \n%2$s</string>
     <string name="search_for_cities">Search for cities</string>
     <string name="device_not_connected">Oops! You are not connected to the internet.</string>
+    <string name="undo">Undo</string>
 
 </resources>
