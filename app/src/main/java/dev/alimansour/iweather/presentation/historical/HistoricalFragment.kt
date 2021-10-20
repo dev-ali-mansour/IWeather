@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.util.Resource
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -50,15 +51,26 @@ class HistoricalFragment : Fragment() {
             adapter = historicalAdapter
 
             viewModel.historicalData.observe(viewLifecycleOwner, { resource ->
-                if (resource is Resource.Success) {
-                    resource.data?.let { list ->
-                        if (list.isNotEmpty()) {
-                            historicalAdapter.differ.submitList(list)
-                            adapter = historicalAdapter
+                when (resource) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        resource.data?.let { list ->
+                            if (list.isNotEmpty()) {
+                                historicalAdapter.differ.submitList(list)
+                                adapter = historicalAdapter
+                            }
                         }
+                    }
+                    is Resource.Error -> {
                     }
                 }
             })
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            Timber.v("Refreshing historical data")
+            binding.swipeRefresh.isRefreshing = false
         }
 
         viewModel.getHistoricalDataList(city.id)
