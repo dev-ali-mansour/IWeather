@@ -66,7 +66,6 @@ class CitiesViewModel(
 
     fun deleteCity(city: CityData) = viewModelScope.launch(Dispatchers.IO) {
         deleteCityUseCase.execute(city)
-        getCities()
     }
 }
 
