@@ -14,8 +14,8 @@ interface HistoricalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertList(elections: List<Historical>)
 
-    @Query("DELETE FROM historical_data WHERE cityId =:cityId")
-    fun clearCityHistorical(cityId: Int)
+    @Query("DELETE FROM historical_data")
+    fun clearHistoricalData()
 
     @Query("SELECT * FROM historical_data WHERE cityId = :cityId")
     fun getHistoricalData(cityId: Int): List<Historical>

@@ -17,17 +17,22 @@ interface LocalDataSource {
     suspend fun addCity(city: City)
 
     /**
+     * Todo Return Flow
      * Retrieve city list from database
      * @return Resource<List<City>>
      */
     suspend fun getCities(): List<City>
 
     /**
-     * Todo Return Flow
      * Add list of historical data to database
      * @param list List of Historical
      */
     suspend fun addHistoricalData(list: List<Historical>)
+
+    /**
+     * Clear all historical data from database
+     */
+    suspend fun clearCachedHistoricalData()
 
     /**
      * Todo Return Flow

@@ -2,8 +2,6 @@ package dev.alimansour.iweather.data.local
 
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -19,6 +17,10 @@ class LocalDataSourceImpl(private val database: WeatherDatabase) : LocalDataSour
 
     override suspend fun addHistoricalData(list: List<Historical>) =
         database.historicalDao().insertList(list)
+
+    override suspend fun clearCachedHistoricalData() {
+        database.historicalDao().clearHistoricalData()
+    }
 
     override suspend fun getHistoricalData(id: Int): List<Historical> =
         database.historicalDao().getHistoricalData(id)

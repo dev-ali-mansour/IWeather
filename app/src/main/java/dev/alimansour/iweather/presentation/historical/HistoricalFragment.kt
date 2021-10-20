@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
@@ -51,26 +52,38 @@ class HistoricalFragment : Fragment() {
             adapter = historicalAdapter
 
             viewModel.historicalData.observe(viewLifecycleOwner, { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                    }
-                    is Resource.Success -> {
-                        resource.data?.let { list ->
-                            if (list.isNotEmpty()) {
-                                historicalAdapter.differ.submitList(list)
-                                adapter = historicalAdapter
-                            }
+                if (resource is Resource.Success) {
+                    resource.data?.let { list ->
+                        if (list.isNotEmpty()) {
+                            historicalAdapter.differ.submitList(list)
+                            adapter = historicalAdapter
                         }
-                    }
-                    is Resource.Error -> {
                     }
                 }
             })
         }
 
+        viewModel.historicalDataUpdated.observe(viewLifecycleOwner, { resource ->
+            when (resource) {
+                is Resource.Loading ->
+                    binding.swipeRefresh.post { binding.swipeRefresh.isRefreshing = true }
+
+                is Resource.Success -> {
+                    binding.swipeRefresh.isRefreshing = false
+                    viewModel.getHistoricalDataList(city.id)
+                }
+                is Resource.Error -> {
+                    binding.swipeRefresh.isRefreshing = false
+                    Timber.e(resource.message.toString())
+                    Snackbar.make(binding.root, resource.message.toString(), Snackbar.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+        })
         binding.swipeRefresh.setOnRefreshListener {
-            Timber.v("Refreshing historical data")
-            binding.swipeRefresh.isRefreshing = false
+            Timber.v("Refreshing historical data of saved cities")
+            viewModel.updateHistoricalData()
         }
 
         viewModel.getHistoricalDataList(city.id)

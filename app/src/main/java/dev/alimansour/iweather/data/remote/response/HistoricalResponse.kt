@@ -14,7 +14,7 @@ data class HistoricalResponse(
     val message: Int,
 
     @field:SerializedName("list")
-    val list: List<ListItem>? = null
+    val list: List<WeatherData>? = null
 )
 
 data class City(
@@ -34,7 +34,7 @@ data class Wind(
     val speed: Double
 )
 
-data class ListItem(
+data class WeatherData(
     @field:SerializedName("dt_txt")
     val date: String,
 

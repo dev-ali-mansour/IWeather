@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.domain.usecase.city
+package dev.alimansour.iweather.domain.usecase.historical
 
 import dev.alimansour.iweather.data.local.entity.Historical
 import dev.alimansour.iweather.domain.repository.WeatherRepository

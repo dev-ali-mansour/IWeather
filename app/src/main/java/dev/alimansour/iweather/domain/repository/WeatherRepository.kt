@@ -24,10 +24,9 @@ interface WeatherRepository {
     suspend fun getCities(): List<City>
 
     /**
-     * Add list of historical data to database
-     * @param list List of Historical
+     * Update historical data of saved cities into database
      */
-    suspend fun addHistoricalData(list: List<Historical>)
+    suspend fun updateHistoricalData()
 
     /**
      * Todo Return Flow

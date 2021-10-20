@@ -2,6 +2,7 @@ package dev.alimansour.iweather.presentation.cities
 
 import android.app.Application
 import androidx.lifecycle.*
+import dev.alimansour.iweather.R
 import dev.alimansour.iweather.data.mappers.CityMapper
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.usecase.city.AddCityUseCase
@@ -33,22 +34,22 @@ class CitiesViewModel(
 
     fun addCity(cityName: String) = viewModelScope.launch(Dispatchers.IO) {
         if (app.isConnected()) {
-            _isCityAdded.postValue(Resource.Loading(null))
+            _isCityAdded.postValue(Resource.Loading())
 
             runCatching {
                 addCityUseCase.execute(cityName)
                 _isCityAdded.postValue(Resource.Success(true))
             }.onFailure { t ->
-                _isCityAdded.postValue(Resource.Error(t.message.toString(), null))
+                _isCityAdded.postValue(Resource.Error(t.message.toString()))
             }
 
         } else {
-            _isCityAdded.postValue(Resource.Error("Oops! You are not connected to the internet."))
+            _isCityAdded.postValue(Resource.Error(app.getString(R.string.device_not_connected)))
         }
     }
 
     fun getCities() = viewModelScope.launch(Dispatchers.IO) {
-        _citiesData.postValue(Resource.Loading(null))
+        _citiesData.postValue(Resource.Loading())
 
         runCatching {
             _citiesData.postValue(
@@ -57,7 +58,7 @@ class CitiesViewModel(
                 )
             )
         }.onFailure { t ->
-            _citiesData.postValue(Resource.Error(t.message.toString(), null))
+            _citiesData.postValue(Resource.Error(t.message.toString()))
         }
     }
 }
