@@ -39,12 +39,10 @@ class CitiesViewModel(
             _isCityAdded.postValue(Resource.Loading())
 
             runCatching {
-                addCityUseCase.execute(cityName)
-                _isCityAdded.postValue(Resource.Success(true))
+                _isCityAdded.postValue(Resource.Success(addCityUseCase.execute(cityName)))
             }.onFailure { t ->
                 _isCityAdded.postValue(Resource.Error(t.message.toString()))
             }
-
         } else {
             _isCityAdded.postValue(Resource.Error(app.getString(R.string.device_not_connected)))
         }

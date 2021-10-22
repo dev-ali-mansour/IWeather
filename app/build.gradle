@@ -116,5 +116,5 @@ dependencies {
     // Android Testing
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$esporesso_version"
-
+    androidTestImplementation "com.google.truth:truth:$truth_version"
 }

@@ -23,7 +23,7 @@ class WeatherRepositoryImpl(
     private val mapper: CityMapper
 ) :
     WeatherRepository {
-    override suspend fun addCity(cityName: String) {
+    override suspend fun addCity(cityName: String): Boolean {
         val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
         resource.data?.let { response ->
             val city = City(
@@ -36,7 +36,9 @@ class WeatherRepositoryImpl(
                 val dataList = getHistoricalList(city, list)
                 localDataSource.addHistoricalData(dataList)
             }
+            return true
         }
+        return false
     }
 
     override suspend fun deleteCity(city: CityData) =

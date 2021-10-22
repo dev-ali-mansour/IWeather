@@ -10,6 +10,6 @@ import javax.inject.Inject
  */
 class AddCityUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
 
-    suspend fun execute(cityName: String) = weatherRepository.addCity(cityName)
+    suspend fun execute(cityName: String): Boolean = weatherRepository.addCity(cityName)
 
 }

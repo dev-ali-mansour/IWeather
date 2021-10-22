@@ -15,7 +15,7 @@ interface WeatherRepository {
      * Add city data to database
      * @param cityName City Name
      */
-    suspend fun addCity(cityName: String)
+    suspend fun addCity(cityName: String):Boolean
 
     /**
      * Delete saved city and it's historical data from the database
