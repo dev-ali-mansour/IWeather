@@ -13,7 +13,7 @@ import dev.alimansour.iweather.data.local.entity.Historical
 interface HistoricalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertList(elections: List<Historical>)
+    fun insertList(historicalList: List<Historical>)
 
     @Query("DELETE FROM historical_data")
     fun clearHistoricalData()
