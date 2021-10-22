@@ -27,24 +27,22 @@ class CitiesViewModel(
     private val deleteCityUseCase: DeleteCityUseCase,
     private val citiesMapper: CitiesMapper
 ) : AndroidViewModel(app) {
-    private val _isCityAdded = MutableLiveData<Resource<Boolean>>()
-    val isCityAdded: LiveData<Resource<Boolean>>
-        get() = _isCityAdded
     private val _citiesData = MutableLiveData<Resource<List<CityData>>>()
     val citiesData: LiveData<Resource<List<CityData>>>
         get() = _citiesData
 
     fun addCity(cityName: String) = viewModelScope.launch(Dispatchers.IO) {
         if (app.isConnected()) {
-            _isCityAdded.postValue(Resource.Loading())
+            _citiesData.postValue(Resource.Loading())
 
             runCatching {
-                _isCityAdded.postValue(Resource.Success(addCityUseCase.execute(cityName)))
+                val cities = citiesMapper.mapFromEntity(addCityUseCase.execute(cityName))
+                _citiesData.postValue(Resource.Success(cities))
             }.onFailure { t ->
-                _isCityAdded.postValue(Resource.Error(t.message.toString()))
+                _citiesData.postValue(Resource.Error(t.message.toString()))
             }
         } else {
-            _isCityAdded.postValue(Resource.Error(app.getString(R.string.device_not_connected)))
+            _citiesData.postValue(Resource.Error(app.getString(R.string.device_not_connected)))
         }
     }
 
@@ -63,6 +61,14 @@ class CitiesViewModel(
     }
 
     fun deleteCity(city: CityData) = viewModelScope.launch(Dispatchers.IO) {
+        _citiesData.postValue(Resource.Loading())
+
+        runCatching {
+            val cities = citiesMapper.mapFromEntity(deleteCityUseCase.execute(city))
+            _citiesData.postValue(Resource.Success(cities))
+        }.onFailure { t ->
+            _citiesData.postValue(Resource.Error(t.message.toString()))
+        }
         deleteCityUseCase.execute(city)
     }
 }

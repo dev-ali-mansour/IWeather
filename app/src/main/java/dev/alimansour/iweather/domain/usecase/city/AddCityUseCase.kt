@@ -1,5 +1,6 @@
 package dev.alimansour.iweather.domain.usecase.city
 
+import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import javax.inject.Inject
 
@@ -10,6 +11,6 @@ import javax.inject.Inject
  */
 class AddCityUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
 
-    suspend fun execute(cityName: String): Boolean = weatherRepository.addCity(cityName)
+    suspend fun execute(cityName: String): List<City> = weatherRepository.addCity(cityName)
 
 }

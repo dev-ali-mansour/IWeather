@@ -14,14 +14,16 @@ interface WeatherRepository {
     /**
      * Add city data to database
      * @param cityName City Name
+     * @return List of City
      */
-    suspend fun addCity(cityName: String):Boolean
+    suspend fun addCity(cityName: String): List<City>
 
     /**
      * Delete saved city and it's historical data from the database
      * @param city City
+     * @return List of City
      */
-    suspend fun deleteCity(city: CityData)
+    suspend fun deleteCity(city: CityData): List<City>
 
     /**
      * Todo Return Flow

@@ -17,7 +17,7 @@ import javax.inject.Inject
  */
 class CitiesAdapter @Inject constructor() :
     RecyclerView.Adapter<CitiesAdapter.AccountViewHolder>() {
-    private val callback = object : DiffUtil.ItemCallback<CityData>(){
+    private val callback = object : DiffUtil.ItemCallback<CityData>() {
         override fun areItemsTheSame(oldItem: CityData, newItem: CityData): Boolean {
             return oldItem.id == newItem.id
         }
@@ -26,7 +26,7 @@ class CitiesAdapter @Inject constructor() :
             return oldItem == newItem
         }
     }
-    val differ = AsyncListDiffer(this,callback)
+    val differ = AsyncListDiffer(this, callback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding: ItemCityBinding = ItemCityBinding.inflate(
@@ -38,7 +38,8 @@ class CitiesAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
         try {
             val city = differ.currentList[position]
-            holder.binding.cityName.text = city.title
+            val title = "$city.name, $city.country"
+            holder.binding.cityName.text = title
             holder.itemView.setOnClickListener {
                 val action =
                     CitiesFragmentDirections.actionCitiesFragmentToHistoricalFragment(city)

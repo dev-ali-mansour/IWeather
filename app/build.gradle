@@ -115,6 +115,8 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
     testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "androidx.arch.core:core-testing:$arch_version"
+    testImplementation("org.mockito:mockito-inline:$mockito_version")
+
 
     // Android Testing
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"

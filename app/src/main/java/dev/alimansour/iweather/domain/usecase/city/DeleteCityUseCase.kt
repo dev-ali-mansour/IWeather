@@ -1,5 +1,6 @@
 package dev.alimansour.iweather.domain.usecase.city
 
+import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import javax.inject.Inject
@@ -11,6 +12,6 @@ import javax.inject.Inject
  */
 class DeleteCityUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
 
-    suspend fun execute(city: CityData) = weatherRepository.deleteCity(city)
+    suspend fun execute(city: CityData): List<City> = weatherRepository.deleteCity(city)
 
 }

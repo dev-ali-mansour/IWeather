@@ -13,7 +13,4 @@ data class CityData(
     val id: Int,
     val name: String,
     val country: String
-) : Parcelable {
-    val title: String
-        get() = "$name, $country"
-}
+) : Parcelable
