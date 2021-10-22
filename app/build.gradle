@@ -39,10 +39,13 @@ android {
     buildFeatures {
         dataBinding = true
     }
-
     packagingOptions {
         exclude "META-INF/AL2.0"
         exclude "META-INF/LGPL2.1"
+    }
+    sourceSets {
+        androidTest.java.srcDirs += "src/testShared/java"
+        test.java.srcDirs += "src/testShared/java"
     }
 }
 
@@ -117,4 +120,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$esporesso_version"
     androidTestImplementation "com.google.truth:truth:$truth_version"
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 }
