@@ -1,10 +1,8 @@
 package dev.alimansour.iweather.data.remote
 
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.BuildConfig
+import dev.alimansour.iweather.okHttpClient
 import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.buffer
@@ -14,7 +12,6 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -24,28 +21,6 @@ import java.util.concurrent.TimeUnit
 class WeatherAPIServiceTest {
     private lateinit var service: WeatherAPIService
     private lateinit var server: MockWebServer
-    private val interceptor = Interceptor { chain ->
-        val url = chain.request()
-            .url
-            .newBuilder()
-            .addQueryParameter("appid", BuildConfig.API_KEY)
-            .addQueryParameter("units", "metric")
-            .build()
-        val request = chain.request()
-            .newBuilder()
-            .url(url)
-            .build()
-
-        return@Interceptor chain.proceed(request)
-    }
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(1, TimeUnit.MINUTES)
-        .readTimeout(1, TimeUnit.MINUTES)
-        .writeTimeout(1, TimeUnit.MINUTES)
-        .retryOnConnectionFailure(true)
-        .addInterceptor(interceptor)
-        .build()
 
     @Before
     fun setUp() {

@@ -2,6 +2,9 @@ package dev.alimansour.iweather
 
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -36,3 +39,26 @@ val historical5 = historical1.copy(id = 5, date = "2021-10-22 06:00:00")
 val historical6 = historical1.copy(id = 6, city = giza)
 val historical7 = historical5.copy(id = 7, city = luxor)
 val TEST_UPDATED_HISTORICAL_LIST = listOf(historical5, historical6, historical7)
+
+private val interceptor = Interceptor { chain ->
+    val url = chain.request()
+        .url
+        .newBuilder()
+        .addQueryParameter("appid", BuildConfig.API_KEY)
+        .addQueryParameter("units", "metric")
+        .build()
+    val request = chain.request()
+        .newBuilder()
+        .url(url)
+        .build()
+
+    return@Interceptor chain.proceed(request)
+}
+
+val okHttpClient = OkHttpClient.Builder()
+    .connectTimeout(1, TimeUnit.MINUTES)
+    .readTimeout(1, TimeUnit.MINUTES)
+    .writeTimeout(1, TimeUnit.MINUTES)
+    .retryOnConnectionFailure(true)
+    .addInterceptor(interceptor)
+    .build()
