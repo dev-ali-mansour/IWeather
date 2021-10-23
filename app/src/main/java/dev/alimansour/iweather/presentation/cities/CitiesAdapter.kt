@@ -38,7 +38,7 @@ class CitiesAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
         try {
             val city = differ.currentList[position]
-            val title = "$city.name, $city.country"
+            val title = "${city.name}, ${city.country}"
             holder.binding.cityName.text = title
             holder.itemView.setOnClickListener {
                 val action =
