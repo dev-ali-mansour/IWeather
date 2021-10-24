@@ -1,9 +1,16 @@
 package dev.alimansour.iweather
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.robolectric.Shadows
+import org.robolectric.shadows.ShadowNetworkCapabilities
 import java.util.concurrent.TimeUnit
 
 
@@ -62,3 +69,14 @@ val okHttpClient = OkHttpClient.Builder()
     .retryOnConnectionFailure(true)
     .addInterceptor(interceptor)
     .build()
+
+@VisibleForTesting(otherwise = VisibleForTesting.NONE)
+fun Context.connect(){
+    val connectivityManager =
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkCapabilities = ShadowNetworkCapabilities.newInstance()
+    Shadows.shadowOf(networkCapabilities).addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+    Shadows.shadowOf(connectivityManager)
+        .setNetworkCapabilities(connectivityManager.activeNetwork, networkCapabilities)
+
+}

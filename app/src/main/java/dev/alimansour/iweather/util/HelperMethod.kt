@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.VisibleForTesting
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
