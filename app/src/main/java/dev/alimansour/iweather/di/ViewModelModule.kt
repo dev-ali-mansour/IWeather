@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.presentation.di
+package dev.alimansour.iweather.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider

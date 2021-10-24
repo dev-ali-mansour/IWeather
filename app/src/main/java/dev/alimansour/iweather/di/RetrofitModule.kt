@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.presentation.di
+package dev.alimansour.iweather.di
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson

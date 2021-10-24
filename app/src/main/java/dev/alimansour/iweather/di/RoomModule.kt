@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.presentation.di
+package dev.alimansour.iweather.di
 
 import android.content.Context
 import androidx.room.Room

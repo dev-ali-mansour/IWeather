@@ -1,4 +1,4 @@
-package dev.alimansour.iweather.presentation.di
+package dev.alimansour.iweather.di
 
 import dagger.Module
 import dagger.Provides
@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.LocalDataSourceImpl
-import dev.alimansour.iweather.data.local.WeatherDatabase
 import dev.alimansour.iweather.data.local.dao.CityDao
 import dev.alimansour.iweather.data.local.dao.HistoricalDao
 import dev.alimansour.iweather.data.mappers.CityMapper
