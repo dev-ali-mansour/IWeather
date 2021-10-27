@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import dev.alimansour.iweather.domain.model.CityData
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -20,3 +21,6 @@ data class City(
     var country: String
 )
 
+fun City.toModel(): CityData = CityData(cityId, name, country)
+
+fun CityData.toEntity(): City = City(id, name, country)

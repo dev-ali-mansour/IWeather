@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import dev.alimansour.iweather.domain.model.HistoricalData
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -29,4 +30,12 @@ data class Historical(
     val humidity: Double,
     @SerializedName("wind_speed")
     val windSpeed: Double,
+)
+
+fun Historical.toModel() = HistoricalData(
+    id, city.toModel(), icon, date, description, temperature, humidity, windSpeed
+)
+
+fun HistoricalData.toEntity() = Historical(
+    id, city.toEntity(), icon, date, description, temperature, humidity, windSpeed
 )

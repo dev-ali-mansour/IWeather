@@ -8,12 +8,12 @@ import dev.alimansour.iweather.data.local.LocalDataSource
 import dev.alimansour.iweather.data.local.LocalDataSourceImpl
 import dev.alimansour.iweather.data.local.dao.CityDao
 import dev.alimansour.iweather.data.local.dao.HistoricalDao
-import dev.alimansour.iweather.data.mappers.CityMapper
 import dev.alimansour.iweather.data.remote.RemoteDataSource
 import dev.alimansour.iweather.data.remote.RemoteDataSourceImpl
 import dev.alimansour.iweather.data.remote.WeatherAPIService
 import dev.alimansour.iweather.data.repository.WeatherRepositoryImpl
 import dev.alimansour.iweather.domain.repository.WeatherRepository
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 /**
@@ -40,6 +40,9 @@ object AppModule {
     fun provideWeatherRepository(
         remoteDataSource: RemoteDataSource,
         localDataSource: LocalDataSource,
-        cityMapper: CityMapper
-    ): WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource, cityMapper)
+    ): WeatherRepository = WeatherRepositoryImpl(remoteDataSource, localDataSource)
+
+    @Singleton
+    @Provides
+    fun provideCoroutineDispatcher() = Dispatchers.IO
 }

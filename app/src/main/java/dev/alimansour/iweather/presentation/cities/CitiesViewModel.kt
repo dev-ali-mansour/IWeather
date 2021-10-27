@@ -3,13 +3,14 @@ package dev.alimansour.iweather.presentation.cities
 import android.app.Application
 import androidx.lifecycle.*
 import dev.alimansour.iweather.R
-import dev.alimansour.iweather.data.mappers.CitiesMapper
+import dev.alimansour.iweather.data.local.entity.toModel
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.usecase.city.AddCityUseCase
 import dev.alimansour.iweather.domain.usecase.city.DeleteCityUseCase
 import dev.alimansour.iweather.domain.usecase.city.GetCitiesUseCase
 import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.isConnected
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,18 +26,17 @@ class CitiesViewModel(
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
     private val deleteCityUseCase: DeleteCityUseCase,
-    private val citiesMapper: CitiesMapper
+    private val dispatcher: CoroutineDispatcher
 ) : AndroidViewModel(app) {
     private val _citiesData = MutableLiveData<Resource<List<CityData>>>()
     val citiesData: LiveData<Resource<List<CityData>>>
         get() = _citiesData
 
-    fun addCity(cityName: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun addCity(cityName: String) = viewModelScope.launch(dispatcher) {
         if (app.isConnected()) {
             _citiesData.postValue(Resource.Loading())
-
             runCatching {
-                val cities = citiesMapper.mapFromEntity(addCityUseCase.execute(cityName))
+                val cities = addCityUseCase.execute(cityName).map { it.toModel() }
                 _citiesData.postValue(Resource.Success(cities))
             }.onFailure { t ->
                 _citiesData.postValue(Resource.Error(t.message.toString()))
@@ -50,11 +50,7 @@ class CitiesViewModel(
         _citiesData.postValue(Resource.Loading())
 
         runCatching {
-            _citiesData.postValue(
-                Resource.Success(
-                    citiesMapper.mapFromEntity(getCitiesUseCase.execute())
-                )
-            )
+            _citiesData.postValue(Resource.Success(getCitiesUseCase.execute().map { it.toModel() }))
         }.onFailure { t ->
             _citiesData.postValue(Resource.Error(t.message.toString()))
         }
@@ -64,8 +60,9 @@ class CitiesViewModel(
         _citiesData.postValue(Resource.Loading())
 
         runCatching {
-            val cities = citiesMapper.mapFromEntity(deleteCityUseCase.execute(city))
-            _citiesData.postValue(Resource.Success(cities))
+            _citiesData.postValue(
+                Resource.Success(deleteCityUseCase.execute(city).map { it.toModel() })
+            )
         }.onFailure { t ->
             _citiesData.postValue(Resource.Error(t.message.toString()))
         }
@@ -79,7 +76,7 @@ class CitiesViewModelFactory @Inject constructor(
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
     private val deleteCityUseCase: DeleteCityUseCase,
-    private val citiesMapper: CitiesMapper
+    private val dispatcher: CoroutineDispatcher
 ) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
@@ -90,7 +87,7 @@ class CitiesViewModelFactory @Inject constructor(
                 getCitiesUseCase,
                 addCityUseCase,
                 deleteCityUseCase,
-                citiesMapper
+                dispatcher
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

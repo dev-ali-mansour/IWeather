@@ -1,11 +1,10 @@
 package dev.alimansour.iweather.data.repository
-
-import dev.alimansour.iweather.TEST_CITY_LIST
-import dev.alimansour.iweather.TEST_HISTORICAL_LIST
-import dev.alimansour.iweather.TEST_UPDATED_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
 import dev.alimansour.iweather.data.local.entity.City
 import dev.alimansour.iweather.data.local.entity.Historical
-import dev.alimansour.iweather.data.mappers.CityMapper
+import dev.alimansour.iweather.data.local.entity.toEntity
 import dev.alimansour.iweather.domain.model.CityData
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import java.lang.Exception
@@ -18,7 +17,6 @@ import java.lang.Exception
 class FakeWeatherRepository : WeatherRepository {
     private val cities = arrayListOf<City>()
     private val historicalList = arrayListOf<Historical>()
-    private val cityMapper = CityMapper()
     private var isSuccessful: Boolean = true
 
     init {
@@ -29,14 +27,14 @@ class FakeWeatherRepository : WeatherRepository {
 
     override suspend fun addCity(cityName: String): List<City> {
         if (isSuccessful) {
-            cities.add(City(5, cityName, "EG"))
+            cities.add(City(4, cityName, "EG"))
             return cities
         } else throw Exception("Failed to get results!")
     }
 
     override suspend fun deleteCity(city: CityData): List<City> {
         if (isSuccessful) {
-            cities.remove(cityMapper.mapToEntity(city))
+            cities.remove(city.toEntity())
             return cities
         } else throw Exception("Failed to get results!")
     }

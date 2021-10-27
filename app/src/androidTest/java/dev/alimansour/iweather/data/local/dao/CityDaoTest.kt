@@ -5,11 +5,11 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.TEST_CITY_LIST
-import dev.alimansour.iweather.cairo
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
+import dev.alimansour.iweather.TestUtil.cairo
+import dev.alimansour.iweather.TestUtil.giza
+import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.data.local.WeatherDatabase
-import dev.alimansour.iweather.giza
-import dev.alimansour.iweather.luxor
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before

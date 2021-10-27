@@ -3,7 +3,7 @@ package dev.alimansour.iweather.presentation.historical
 import android.app.Application
 import androidx.lifecycle.*
 import dev.alimansour.iweather.R
-import dev.alimansour.iweather.data.mappers.HistoricalMapper
+import dev.alimansour.iweather.data.local.entity.toModel
 import dev.alimansour.iweather.domain.model.HistoricalData
 import dev.alimansour.iweather.domain.usecase.historical.GetHistoricalDataUseCase
 import dev.alimansour.iweather.domain.usecase.historical.UpdateHistoricalDataUseCase
@@ -23,7 +23,6 @@ class HistoricalViewModel(
     private val app: Application,
     private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
     private val updateHistoricalDataUseCase: UpdateHistoricalDataUseCase,
-    private val historicalMapper: HistoricalMapper
 ) : AndroidViewModel(app) {
 
     private val _historicalData = MutableLiveData<Resource<List<HistoricalData>>>()
@@ -43,9 +42,7 @@ class HistoricalViewModel(
         runCatching {
             _historicalData.postValue(
                 Resource.Success(
-                    historicalMapper.mapFromEntity(
-                        getHistoricalDataUseCase.execute(cityId)
-                    )
+                    getHistoricalDataUseCase.execute(cityId).map { it.toModel() }
                 )
             )
         }.onFailure { t ->
@@ -73,8 +70,7 @@ class HistoricalViewModel(
 class HistoricalViewModelFactory @Inject constructor(
     private val app: Application,
     private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
-    private val updateHistoricalDataUseCase: UpdateHistoricalDataUseCase,
-    private val historicalMapper: HistoricalMapper
+    private val updateHistoricalDataUseCase: UpdateHistoricalDataUseCase
 ) :
     ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
@@ -83,8 +79,7 @@ class HistoricalViewModelFactory @Inject constructor(
             return HistoricalViewModel(
                 app,
                 getHistoricalDataUseCase,
-                updateHistoricalDataUseCase,
-                historicalMapper
+                updateHistoricalDataUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

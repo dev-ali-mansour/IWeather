@@ -9,6 +9,7 @@ import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.VisibleForTesting
+import dev.alimansour.iweather.presentation.MyApplication
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -39,6 +40,8 @@ fun Activity.hideKeyboard() {
  * @return Boolean
  */
 fun Context.isConnected(): Boolean {
+    val app = applicationContext as MyApplication
+    if (app.isForTest) return app.connectedForTest
     var result = false
     val connectivityManager =
         this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

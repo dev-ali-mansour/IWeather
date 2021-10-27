@@ -1,12 +1,10 @@
 package dev.alimansour.iweather.domain.usecase.historical
 
 import com.google.common.truth.Truth
-import dev.alimansour.iweather.TEST_CITY_LIST
-import dev.alimansour.iweather.TEST_HISTORICAL_LIST
-import dev.alimansour.iweather.cairo
+import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.data.repository.FakeWeatherRepository
 import dev.alimansour.iweather.domain.repository.WeatherRepository
-import dev.alimansour.iweather.giza
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test

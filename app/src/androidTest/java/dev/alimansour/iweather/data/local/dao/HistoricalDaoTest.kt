@@ -6,6 +6,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.*
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.cairo
+import dev.alimansour.iweather.TestUtil.giza
+import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.data.local.WeatherDatabase
 import dev.alimansour.iweather.data.local.entity.City
 import kotlinx.coroutines.runBlocking

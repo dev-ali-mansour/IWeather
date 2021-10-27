@@ -2,6 +2,10 @@ package dev.alimansour.iweather.domain.usecase.historical
 
 import com.google.common.truth.Truth
 import dev.alimansour.iweather.*
+import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.cairo
+import dev.alimansour.iweather.TestUtil.giza
+import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.data.repository.FakeWeatherRepository
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import kotlinx.coroutines.runBlocking
