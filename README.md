@@ -32,7 +32,6 @@ apiKey = "{YOUR_API_KEY}"
 * [Multidex](https://developer.android.com/studio/build/multidex) - To enable creating multi dex files because of using set of libraries that reached the maximum size of single dex file.
 * [Model-View-ViewModel(MVVM)](https://developer.android.com/topic/architecture) - Offers an implementation of observer design pattern.
 * [Data Binding](https://developer.android.com/topic/libraries/data-binding) - It helps in decoratively binding UI elements of our layout to data source of our app.
-* [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - notifies views of any database changes in an observer way.
 * [Retrofit](https://square.github.io/retrofit/) - It is a type-safe REST client for Android, Java and Kotlin developed by Square. The library provides a powerful framework for authenticating and interacting with APIs and sending network requests with OkHttp.
 * [Room DB](https://developer.android.com/training/data-storage/room) - To manage SQLite database easily and avoid a lot boilerplate code.
 * [Glide](https://github.com/bumptech/glide) - It is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.
@@ -41,6 +40,6 @@ apiKey = "{YOUR_API_KEY}"
 * [Clean Architecture](https://www.raywenderlich.com/3595916-clean-architecture-tutorial-for-android-getting-started) - Applying Clean Architecture and Solid Principles to build a robust, maintainable, and testable application.
 * [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver) - This library makes it easy to test that your app Does The Right Thing when it makes HTTP and HTTPS calls. It lets you specify which responses to return and then verify that requests were made as expected.
 * [Google Truth](https://truth.dev) - Truth makes your test assertions and failure messages more readable. Similar to AssertJ, it natively supports many JDK and Guava types, and it is extensible to others.
-
+* [Kotlin Flow](https://developer.android.com/kotlin/flow) - In coroutines, a flow is a type that can emit multiple values sequentially, as opposed to suspend functions that return only a single value. For example, you can use a flow to receive live updates from a database. I replaced LiveData objects in ViewModels with StateFlow objects. it is much easier for unit testing.
 ## License
 Please review the following [license agreement](https://bumptech.github.io/glide/dev/open-source-licenses.html)
