@@ -1,8 +1,15 @@
 # IWeather Android Application
 
-This project was created at first as a solution for an assessment for Android developer role in a company. Then I decided to continue updating it using the latest tools and techniques.<br/>
+This project was created as a demo project for implementing latest frameworks, Android APIs, tools, and techniques.<br/>
+It follows Clean architecture design pattern. Project files are divided into three layers (presentation, domain, and data).<br/><br/>
+<p align="center">
+<img src="https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg" width="500" align="center"><br/>
+</p>
+<br/>
+It contains Production Code, Unit Tests for domain layer classes and ViewModels in presentation layer, and Instrumentation Tests for Room database related classes in data layer.<br/>
 You can use it as a reference for using the tools described at the end of this file.<br/>
 If you want to contribute to this repository by reviewing my code, refactor it, or add new features, You are almost welcomed.
+
 ## Screenshots
 
 <img src="https://i.ibb.co/BgdFk2t/Screenshot-2021-10-08-17-54-15-88-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/Drr6nKJ/Screenshot-2021-10-08-17-57-56-62-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/jT06nKt/Screenshot-2021-10-08-17-58-29-55-9f89676b8b215e1e3984633e34501759.jpg" width="200">&nbsp;<img src="https://i.ibb.co/xFd8Sv7/Screenshot-2021-10-08-17-58-42-11-9f89676b8b215e1e3984633e34501759.jpg" width="200">
