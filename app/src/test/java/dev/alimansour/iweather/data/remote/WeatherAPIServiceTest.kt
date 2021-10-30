@@ -2,6 +2,10 @@ package dev.alimansour.iweather.data.remote
 
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.BuildConfig
+import dev.alimansour.iweather.data.remote.response.Main
+import dev.alimansour.iweather.data.remote.response.WeatherData
+import dev.alimansour.iweather.data.remote.response.WeatherItem
+import dev.alimansour.iweather.data.remote.response.Wind
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -40,7 +44,7 @@ class WeatherAPIServiceTest {
         return@Interceptor chain.proceed(request)
     }
 
-    val okHttpClient = OkHttpClient.Builder()
+    private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(1, TimeUnit.MINUTES)
         .readTimeout(1, TimeUnit.MINUTES)
         .writeTimeout(1, TimeUnit.MINUTES)
@@ -64,45 +68,61 @@ class WeatherAPIServiceTest {
         server.shutdown()
     }
 
-    private fun enqueueMockResponse(fileName: String) {
-        val inputStream = javaClass.classLoader!!.getResourceAsStream(fileName)
-        val source = inputStream.source().buffer()
-        val mockResponse = MockResponse()
-        mockResponse.setBody(source.readString(Charsets.UTF_8))
-        server.enqueue(mockResponse)
-    }
-
     @Test
-    fun getHistoricalData_sentRequest_requestPathIsCorrect() {
+    fun `getHistoricalData() When send request Then request path is correct`() {
         runBlocking {
-            enqueueMockResponse(fileName)
+            //GIVEN
+            val path = "/forecast?q=cairo&appid=ddbbb032375d79f1670080b110a8f45e&units=metric"
+
+            //WHEN
+            enqueueMockResponse()
             service.getHistoricalData("cairo").body()
             val request = server.takeRequest()
-            assertThat(request.path).isEqualTo("/forecast?q=cairo&appid=ddbbb032375d79f1670080b110a8f45e&units=metric")
+
+            //THEN
+            assertThat(request.path).isEqualTo(path)
         }
     }
 
     @Test
-    fun getHistoricalData_receiveResponse_responseBodyIsNotNull() {
+    fun `getHistoricalData() When receiveResponse then response body is not null`() {
         runBlocking {
-            enqueueMockResponse(fileName)
+            //WHEN
+            enqueueMockResponse()
             val responseBody = service.getHistoricalData("cairo").body()
+
+            //THEN
             assertThat(responseBody).isNotNull()
         }
     }
 
     @Test
-    fun getHistoricalDate_receivedResponse_contentIsCorrect() {
+    fun `getHistoricalDate() When receive response Then the response is correct`() {
         runBlocking {
-            enqueueMockResponse("historical_response.json")
+            //GIVEN
+            val data = WeatherData(
+                date = "2021-10-18 18:00:00",
+                weather = listOf(WeatherItem(icon = "03n", description = "scattered clouds")),
+                main = Main(temp = 25.3, humidity = 47.0),
+                wind = Wind(speed = 7.2)
+            )
+
+            //WHEN
+            enqueueMockResponse()
             val responseBody = service.getHistoricalData("cairo").body()
             val historicalItems = responseBody!!.list
             val item = historicalItems!![0]
-            assertThat(item.date).isEqualTo("2021-10-18 18:00:00")
-            assertThat(item.weather[0].description).isEqualTo("scattered clouds")
-            assertThat(item.main.temp).isEqualTo(25.3)
-            assertThat(item.main.humidity).isEqualTo(47)
-            assertThat(item.wind.speed).isEqualTo(7.2)
+
+            //THEN
+            assertThat(item).isEqualTo(data)
         }
+    }
+
+    private fun enqueueMockResponse() {
+        val inputStream = javaClass.classLoader!!.getResourceAsStream(fileName)
+        val source = inputStream.source().buffer()
+        val mockResponse = MockResponse()
+        mockResponse.setBody(source.readString(Charsets.UTF_8))
+        server.enqueue(mockResponse)
     }
 }

@@ -1,8 +1,11 @@
 package dev.alimansour.iweather.data.local.dao
 
-import androidx.room.*
-import dev.alimansour.iweather.data.local.entity.City
-import dev.alimansour.iweather.data.local.entity.Historical
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import dev.alimansour.iweather.data.local.entity.HistoricalEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -13,7 +16,7 @@ import dev.alimansour.iweather.data.local.entity.Historical
 interface HistoricalDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertList(historicalList: List<Historical>)
+    fun insertList(historicalEntityList: List<HistoricalEntity>)
 
     @Query("DELETE FROM historical_data")
     fun clearHistoricalData()
@@ -22,5 +25,5 @@ interface HistoricalDao {
     fun clearCityHistoricalData(cityId: Int)
 
     @Query("SELECT * FROM historical_data WHERE cityId = :cityId")
-    fun getHistoricalData(cityId: Int): List<Historical>
+    fun getHistoricalData(cityId: Int): Flow<List<HistoricalEntity>>
 }

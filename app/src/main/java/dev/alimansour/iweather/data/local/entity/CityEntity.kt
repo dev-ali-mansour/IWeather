@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import dev.alimansour.iweather.domain.model.CityData
+import dev.alimansour.iweather.domain.model.City
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -12,7 +12,7 @@ import dev.alimansour.iweather.domain.model.CityData
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Entity(tableName = "cities", indices = [Index(value = ["name", "country"], unique = true)])
-data class City(
+data class CityEntity(
     @PrimaryKey(autoGenerate = true)
     var cityId: Int,
     @SerializedName("name")
@@ -21,6 +21,6 @@ data class City(
     var country: String
 )
 
-fun City.toModel(): CityData = CityData(cityId, name, country)
+fun CityEntity.toModel(): City = City(cityId, name, country)
 
-fun CityData.toEntity(): City = City(id, name, country)
+fun City.toEntity(): CityEntity = CityEntity(id, name, country)

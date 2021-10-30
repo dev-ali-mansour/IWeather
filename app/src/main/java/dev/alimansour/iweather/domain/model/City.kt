@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 @Parcelize
-data class CityData(
+data class City(
     val id: Int,
     val name: String,
     val country: String

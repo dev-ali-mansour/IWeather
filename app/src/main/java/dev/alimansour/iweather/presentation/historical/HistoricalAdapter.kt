@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.iweather.databinding.ItemHistoricalBinding
-import dev.alimansour.iweather.domain.model.CityData
-import dev.alimansour.iweather.domain.model.HistoricalData
+import dev.alimansour.iweather.domain.model.Historical
 import dev.alimansour.iweather.presentation.details.DetailsActivity
 import javax.inject.Inject
 
@@ -19,12 +18,12 @@ import javax.inject.Inject
  */
 class HistoricalAdapter @Inject constructor() :
     RecyclerView.Adapter<HistoricalAdapter.AccountViewHolder>() {
-    private val callback = object : DiffUtil.ItemCallback<HistoricalData>() {
-        override fun areItemsTheSame(oldItem: HistoricalData, newItem: HistoricalData): Boolean {
+    private val callback = object : DiffUtil.ItemCallback<Historical>() {
+        override fun areItemsTheSame(oldItem: Historical, newItem: Historical): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: HistoricalData, newItem: HistoricalData): Boolean {
+        override fun areContentsTheSame(oldItem: Historical, newItem: Historical): Boolean {
             return oldItem == newItem
         }
     }

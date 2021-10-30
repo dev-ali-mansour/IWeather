@@ -1,8 +1,8 @@
 package dev.alimansour.iweather.domain.repository
 
-import dev.alimansour.iweather.data.local.entity.City
-import dev.alimansour.iweather.data.local.entity.Historical
-import dev.alimansour.iweather.domain.model.CityData
+import dev.alimansour.iweather.domain.model.City
+import dev.alimansour.iweather.domain.model.Historical
+import kotlinx.coroutines.flow.Flow
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -14,23 +14,20 @@ interface WeatherRepository {
     /**
      * Add city data to database
      * @param cityName City Name
-     * @return List of City
      */
-    suspend fun addCity(cityName: String): List<City>
+    suspend fun addCity(cityName: String)
 
     /**
      * Delete saved city and it's historical data from the database
      * @param city City
-     * @return List of City
      */
-    suspend fun deleteCity(city: CityData): List<City>
+    suspend fun deleteCity(city: City)
 
     /**
-     * Todo Return Flow
      * Retrieve city list from database
-     * @return Resource<List<City>>
+     * @return Flow<List<CityEntity>>
      */
-    suspend fun getCities(): List<City>
+    suspend fun getCities(): Flow<List<City>>
 
     /**
      * Update historical data of saved cities into database
@@ -38,10 +35,9 @@ interface WeatherRepository {
     suspend fun updateHistoricalData()
 
     /**
-     * Todo Return Flow
      * Fetch historical weather data for specific city
      * @param id City Id
-     * @return List<Historical>
+     * @return Flow<List<HistoricalEntity>>
      */
-    suspend fun getHistoricalData(id: Int): List<Historical>
+    suspend fun getHistoricalData(id: Int): Flow<List<Historical>>
 }

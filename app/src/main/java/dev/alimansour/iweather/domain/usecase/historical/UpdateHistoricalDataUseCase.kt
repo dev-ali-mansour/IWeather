@@ -11,5 +11,4 @@ import javax.inject.Inject
 class UpdateHistoricalDataUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
 
     suspend fun execute() = weatherRepository.updateHistoricalData()
-
 }

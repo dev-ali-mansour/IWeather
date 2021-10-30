@@ -11,7 +11,7 @@
 
         <variable
             name="data"
-            type="dev.alimansour.iweather.domain.model.HistoricalData" />
+            type="dev.alimansour.iweather.domain.model.Historical" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

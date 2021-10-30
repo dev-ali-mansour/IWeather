@@ -1,7 +1,8 @@
 package dev.alimansour.iweather.domain.usecase.city
 
-import dev.alimansour.iweather.data.local.entity.City
+import dev.alimansour.iweather.domain.model.City
 import dev.alimansour.iweather.domain.repository.WeatherRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -11,6 +12,6 @@ import javax.inject.Inject
  */
 class GetCitiesUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
 
-    suspend fun execute(): List<City> = weatherRepository.getCities()
+    suspend fun execute(): Flow<List<City>> = weatherRepository.getCities()
 
 }

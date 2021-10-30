@@ -1,15 +1,20 @@
 package dev.alimansour.iweather.data.repository
 
 import dev.alimansour.iweather.data.local.LocalDataSource
-import dev.alimansour.iweather.data.local.entity.City
-import dev.alimansour.iweather.data.local.entity.Historical
+import dev.alimansour.iweather.data.local.entity.CityEntity
+import dev.alimansour.iweather.data.local.entity.HistoricalEntity
 import dev.alimansour.iweather.data.local.entity.toEntity
+import dev.alimansour.iweather.data.local.entity.toModel
 import dev.alimansour.iweather.data.remote.RemoteDataSource
 import dev.alimansour.iweather.data.remote.response.HistoricalResponse
 import dev.alimansour.iweather.data.remote.response.WeatherData
-import dev.alimansour.iweather.domain.model.CityData
+import dev.alimansour.iweather.domain.model.City
+import dev.alimansour.iweather.domain.model.Historical
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import dev.alimansour.iweather.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import retrofit2.Response
 
 /**
@@ -22,10 +27,10 @@ class WeatherRepositoryImpl(
     private val localDataSource: LocalDataSource,
 ) :
     WeatherRepository {
-    override suspend fun addCity(cityName: String): List<City> {
+    override suspend fun addCity(cityName: String) {
         val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
         resource.data?.let { response ->
-            val city = City(
+            val city = CityEntity(
                 response.city.id,
                 response.city.name,
                 response.city.country
@@ -36,31 +41,34 @@ class WeatherRepositoryImpl(
                 localDataSource.addHistoricalData(dataList)
             }
         }
-        return localDataSource.getCities()
     }
 
-    override suspend fun deleteCity(city: CityData): List<City> {
+    override suspend fun deleteCity(city: City) {
         localDataSource.deleteCity(city.toEntity())
-        return localDataSource.getCities()
     }
 
-    override suspend fun getCities(): List<City> = localDataSource.getCities()
+    override suspend fun getCities(): Flow<List<City>> =
+        localDataSource.getCities().map { list -> list.map { it.toModel() } }
 
     override suspend fun updateHistoricalData() {
         localDataSource.clearCachedHistoricalData()
-        localDataSource.getCities().map { city ->
-            val resource = responseToResource(remoteDataSource.fetchHistoricalData(city.name))
-            resource.data?.let { response ->
-                response.list?.let { list ->
-                    val dataList = getHistoricalList(city, list)
-                    localDataSource.addHistoricalData(dataList)
+        localDataSource.getCities().collect { cities ->
+            cities.map { city ->
+                val resource = responseToResource(remoteDataSource.fetchHistoricalData(city.name))
+                resource.data?.let { response ->
+                    response.list?.let { list ->
+                        val dataList = getHistoricalList(city, list)
+                        localDataSource.addHistoricalData(dataList)
+                    }
                 }
             }
         }
     }
 
-    override suspend fun getHistoricalData(id: Int): List<Historical> =
-        localDataSource.getHistoricalData(id)
+    override suspend fun getHistoricalData(id: Int): Flow<List<Historical>> =
+        localDataSource.getHistoricalData(id).map { list ->
+            list.map { it.toModel() }
+        }
 
     /**
      * Convert Retrofit response to Resource
@@ -78,17 +86,20 @@ class WeatherRepositoryImpl(
 
     /**
      * Get list of historical items using city and it's list of WeatherData
-     * @param city City
+     * @param cityEntity City
      * @param list List of WeatherData
      * @return List of Historical
      */
-    private fun getHistoricalList(city: City, list: List<WeatherData>): List<Historical> {
-        val dataList = ArrayList<Historical>()
+    private fun getHistoricalList(
+        cityEntity: CityEntity,
+        list: List<WeatherData>
+    ): List<HistoricalEntity> {
+        val dataList = ArrayList<HistoricalEntity>()
         list.forEach { item ->
             dataList.add(
-                Historical(
+                HistoricalEntity(
                     0,
-                    city,
+                    cityEntity,
                     item.weather[0].icon,
                     item.date,
                     item.weather[0].description,

@@ -25,6 +25,6 @@
         tools:layout="@layout/fragment_historical">
         <argument
             android:name="city"
-            app:argType="dev.alimansour.iweather.domain.model.CityData" />
+            app:argType="dev.alimansour.iweather.domain.model.City" />
     </fragment>
 </navigation>

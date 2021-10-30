@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,9 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.FragmentCitiesBinding
+import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.util.Resource
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 /**
@@ -44,23 +47,19 @@ class CitiesFragment : Fragment() {
 
         binding.citiesRecyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(requireActivity())
             adapter = citiesAdapter
 
-            viewModel.citiesData.observe(viewLifecycleOwner, { resource ->
-                if (resource is Resource.Success) {
-                    resource.data?.let { list ->
-                        if (list.isNotEmpty()) {
-                            citiesAdapter.differ.submitList(list)
-                            adapter = citiesAdapter
-                        }
-                    }
-                }
-            })
+            lifecycleScope.launchWhenStarted { collectCitiesFlow() }
+
+            viewModel.getCities()
+            initSwipeToDelete()
+
+            return binding.root
         }
+    }
 
-        viewModel.getCities()
-
+    private fun initSwipeToDelete() {
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
             ItemTouchHelper.START or ItemTouchHelper.END
@@ -92,8 +91,36 @@ class CitiesFragment : Fragment() {
         ItemTouchHelper(itemTouchHelperCallBack).apply {
             attachToRecyclerView(binding.citiesRecyclerView)
         }
+    }
 
-        return binding.root
+    /**
+     * Collect citiesFlow from CitiesViewModel
+     * Load data into RecyclerView if response is successful
+     */
+    private suspend fun collectCitiesFlow() {
+        val mainActivity = requireActivity() as MainActivity
+        viewModel.citiesFlow.collect { resource ->
+            when (resource) {
+                is Resource.Loading -> mainActivity.isProgressBarVisible = true
+                is Resource.Success -> {
+                    mainActivity.isProgressBarVisible = false
+                    resource.data?.let { list ->
+                        if (list.isNotEmpty()) {
+                            citiesAdapter.differ.submitList(list)
+                            binding.citiesRecyclerView.adapter = citiesAdapter
+                        }
+                    }
+                }
+                is Resource.Error -> {
+                    mainActivity.isProgressBarVisible = false
+                    Snackbar.make(
+                        binding.root,
+                        resource.message.toString(),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

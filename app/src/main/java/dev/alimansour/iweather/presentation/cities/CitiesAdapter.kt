@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.alimansour.iweather.databinding.ItemCityBinding
-import dev.alimansour.iweather.domain.model.CityData
+import dev.alimansour.iweather.domain.model.City
 import javax.inject.Inject
 
 /**
@@ -17,12 +17,12 @@ import javax.inject.Inject
  */
 class CitiesAdapter @Inject constructor() :
     RecyclerView.Adapter<CitiesAdapter.AccountViewHolder>() {
-    private val callback = object : DiffUtil.ItemCallback<CityData>() {
-        override fun areItemsTheSame(oldItem: CityData, newItem: CityData): Boolean {
+    private val callback = object : DiffUtil.ItemCallback<City>() {
+        override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: CityData, newItem: CityData): Boolean {
+        override fun areContentsTheSame(oldItem: City, newItem: City): Boolean {
             return oldItem == newItem
         }
     }

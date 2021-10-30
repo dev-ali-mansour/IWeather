@@ -2,8 +2,9 @@ package dev.alimansour.iweather.data.local
 
 import dev.alimansour.iweather.data.local.dao.CityDao
 import dev.alimansour.iweather.data.local.dao.HistoricalDao
-import dev.alimansour.iweather.data.local.entity.City
-import dev.alimansour.iweather.data.local.entity.Historical
+import dev.alimansour.iweather.data.local.entity.CityEntity
+import dev.alimansour.iweather.data.local.entity.HistoricalEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -16,20 +17,20 @@ class LocalDataSourceImpl(
 ) :
     LocalDataSource {
 
-    override suspend fun addCity(city: City) = cityDao.insert(city)
+    override suspend fun addCity(cityEntity: CityEntity) = cityDao.insert(cityEntity)
 
-    override suspend fun deleteCity(city: City) {
-        cityDao.delete(city)
-        historicalDao.clearCityHistoricalData(city.cityId)
+    override suspend fun deleteCity(cityEntity: CityEntity) {
+        cityDao.delete(cityEntity)
+        historicalDao.clearCityHistoricalData(cityEntity.cityId)
     }
 
-    override suspend fun getCities(): List<City> = cityDao.getCities()
+    override suspend fun getCities(): Flow<List<CityEntity>> = cityDao.getCities()
 
-    override suspend fun addHistoricalData(list: List<Historical>) =
+    override suspend fun addHistoricalData(list: List<HistoricalEntity>) =
         historicalDao.insertList(list)
 
     override suspend fun clearCachedHistoricalData() = historicalDao.clearHistoricalData()
 
-    override suspend fun getHistoricalData(id: Int): List<Historical> =
+    override suspend fun getHistoricalData(id: Int): Flow<List<HistoricalEntity>> =
         historicalDao.getHistoricalData(id)
 }

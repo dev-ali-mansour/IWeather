@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.ActivityDetailsBinding
-import dev.alimansour.iweather.domain.model.HistoricalData
+import dev.alimansour.iweather.domain.model.Historical
 import java.util.*
 
 /**
@@ -28,7 +28,7 @@ class DetailsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
 
-        val data = intent.getParcelableExtra<HistoricalData>("data")
+        val data = intent.getParcelableExtra<Historical>("data")
         data?.let {
             binding.data = it
         }

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,9 +20,11 @@ import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.ActivityMainBinding
 import dev.alimansour.iweather.databinding.SearchBottomSheetBinding
 import dev.alimansour.iweather.presentation.cities.CitiesViewModel
+import dev.alimansour.iweather.util.ActionState
 import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.dp
 import dev.alimansour.iweather.util.hideKeyboard
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,6 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var isProgressBarVisible: Boolean
+        get() = binding.progressBar.isVisible
+        set(value) {
+            binding.progressBar.isVisible = value
+        }
 
     @Inject
     lateinit var viewModel: CitiesViewModel
@@ -76,16 +85,43 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+        lifecycleScope.launchWhenStarted { collectActionFlow() }
+
         binding.fab.setOnClickListener { view ->
             view.visibility = View.GONE
             searchForCity()
         }
     }
 
+    private suspend fun collectActionFlow() {
+        viewModel.actionFlow.collect { resource ->
+            when (resource) {
+                is Resource.Loading -> binding.progressBar.isVisible = true
+                is Resource.Success -> {
+                    if (resource.data == ActionState.Add) {
+                        binding.progressBar.isVisible = false
+                        Snackbar.make(
+                            binding.root,
+                            "City was added successfully",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                is Resource.Error -> {
+                    binding.progressBar.isVisible = false
+                    Snackbar.make(
+                        binding.root,
+                        resource.message.toString(),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fragment)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     /**
@@ -97,7 +133,6 @@ class MainActivity : AppCompatActivity() {
             val sheetBinding: SearchBottomSheetBinding = SearchBottomSheetBinding
                 .inflate(LayoutInflater.from(this), null, false)
             sheetDialog.apply {
-
                 setContentView(sheetBinding.root)
                 setCancelable(true)
                 show()

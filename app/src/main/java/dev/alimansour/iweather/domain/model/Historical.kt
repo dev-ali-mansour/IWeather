@@ -10,9 +10,9 @@ import kotlinx.parcelize.Parcelize
  */
 
 @Parcelize
-data class HistoricalData(
+data class Historical(
     val id: Int,
-    val city: CityData,
+    val city: City,
     val icon: String,
     val date: String,
     val description: String,

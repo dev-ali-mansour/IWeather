@@ -1,7 +1,8 @@
 package dev.alimansour.iweather.data.local.dao
 
 import androidx.room.*
-import dev.alimansour.iweather.data.local.entity.City
+import dev.alimansour.iweather.data.local.entity.CityEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -12,11 +13,11 @@ import dev.alimansour.iweather.data.local.entity.City
 interface CityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(city: City)
+    fun insert(cityEntity: CityEntity)
 
     @Delete
-    fun delete(city: City)
+    fun delete(cityEntity: CityEntity)
 
     @Query("SELECT * FROM cities")
-    fun getCities(): List<City>
+    fun getCities(): Flow<List<CityEntity>>
 }

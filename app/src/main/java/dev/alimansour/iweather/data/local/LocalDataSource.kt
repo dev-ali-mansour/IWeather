@@ -1,7 +1,8 @@
 package dev.alimansour.iweather.data.local
 
-import dev.alimansour.iweather.data.local.entity.City
-import dev.alimansour.iweather.data.local.entity.Historical
+import dev.alimansour.iweather.data.local.entity.CityEntity
+import dev.alimansour.iweather.data.local.entity.HistoricalEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -12,28 +13,27 @@ interface LocalDataSource {
 
     /**
      * Add city data to database
-     * @param city City
+     * @param cityEntity City
      */
-    suspend fun addCity(city: City)
+    suspend fun addCity(cityEntity: CityEntity)
 
     /**
      * Delete saved city and it's historical data from the database
-     * @param city City
+     * @param cityEntity City
      */
-    suspend fun deleteCity(city: City)
+    suspend fun deleteCity(cityEntity: CityEntity)
 
     /**
-     * Todo Return Flow
      * Retrieve city list from database
-     * @return Resource<List<City>>
+     * @return Flow<Resource<List<City>>>
      */
-    suspend fun getCities(): List<City>
+    suspend fun getCities(): Flow<List<CityEntity>>
 
     /**
      * Add list of historical data to database
      * @param list List of Historical
      */
-    suspend fun addHistoricalData(list: List<Historical>)
+    suspend fun addHistoricalData(list: List<HistoricalEntity>)
 
     /**
      * Clear all historical data from database
@@ -41,10 +41,9 @@ interface LocalDataSource {
     suspend fun clearCachedHistoricalData()
 
     /**
-     * Todo Return Flow
      * Get historical weather data for specific city
      * @param id City Id
-     * @return CityAndHistorical
+     * @return Flow<List<HistoricalEntity>>
      */
-    suspend fun getHistoricalData(id: Int): List<Historical>
+    suspend fun getHistoricalData(id: Int): Flow<List<HistoricalEntity>>
 }

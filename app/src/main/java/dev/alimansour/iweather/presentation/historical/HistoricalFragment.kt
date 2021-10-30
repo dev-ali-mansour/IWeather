@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.util.Resource
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,7 +30,7 @@ class HistoricalFragment : Fragment() {
     lateinit var historicalAdapter: HistoricalAdapter
 
     @Inject
-    lateinit var viewModel: HistoricalViewModel
+    lateinit var historicalViewModel: HistoricalViewModel
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -51,44 +53,74 @@ class HistoricalFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = historicalAdapter
 
-            viewModel.historicalData.observe(viewLifecycleOwner, { resource ->
-                if (resource is Resource.Success) {
-                    resource.data?.let { list ->
-                        if (list.isNotEmpty()) {
-                            historicalAdapter.differ.submitList(list)
-                            adapter = historicalAdapter
-                        }
-                    }
-                }
-            })
+            lifecycleScope.launchWhenStarted {
+                collectHistoricalFlow()
+                collectActionFlow()
+            }
         }
 
-        viewModel.historicalDataUpdated.observe(viewLifecycleOwner, { resource ->
-            when (resource) {
-                is Resource.Loading ->
-                    binding.swipeRefresh.post { binding.swipeRefresh.isRefreshing = true }
+        binding.swipeRefresh.setOnRefreshListener {
+            Timber.v("Refreshing historical data of saved cities")
+            historicalViewModel.updateHistoricalData()
+        }
 
-                is Resource.Success -> {
-                    binding.swipeRefresh.isRefreshing = false
-                    viewModel.getHistoricalDataList(city.id)
-                }
-                is Resource.Error -> {
-                    binding.swipeRefresh.isRefreshing = false
-                    Timber.e(resource.message.toString())
-                    Snackbar.make(binding.root, resource.message.toString(), Snackbar.LENGTH_LONG)
-                        .show()
+        historicalViewModel.getHistorical(city.id)
+
+        return binding.root
+    }
+
+    private suspend fun collectActionFlow() {
+        (requireActivity() as MainActivity).apply {
+            historicalViewModel.actionFlow.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> isProgressBarVisible = true
+                    is Resource.Success -> {
+                        isProgressBarVisible = false
+                        Snackbar.make(
+                            binding.root,
+                            "Historical data was updated successfully",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    is Resource.Error -> {
+                        isProgressBarVisible = false
+                        Timber.e(resource.message.toString())
+                        Snackbar.make(
+                            binding.root,
+                            resource.message.toString(),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
 
-        })
-        binding.swipeRefresh.setOnRefreshListener {
-            Timber.v("Refreshing historical data of saved cities")
-            viewModel.updateHistoricalData()
         }
+    }
 
-        viewModel.getHistoricalDataList(city.id)
+    private suspend fun collectHistoricalFlow() {
+        binding.apply {
+            historicalViewModel.historicalFlow.collect { resource ->
+                when (resource) {
+                    is Resource.Loading ->
+                        swipeRefresh.post { swipeRefresh.isRefreshing = true }
+                    is Resource.Success -> {
+                        swipeRefresh.isRefreshing = false
+                        resource.data?.let { list ->
+                            if (list.isNotEmpty()) {
+                                historicalAdapter.differ.submitList(list)
+                                citiesRecyclerView.adapter = historicalAdapter
+                            }
+                        }
+                    }
+                    is Resource.Error -> {
+                        swipeRefresh.isRefreshing = false
+                        Snackbar.make(root, resource.message.toString(), Snackbar.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            }
 
-        return binding.root
+        }
     }
 
     override fun onDestroyView() {
