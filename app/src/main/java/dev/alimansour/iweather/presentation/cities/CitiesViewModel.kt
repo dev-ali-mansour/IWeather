@@ -11,8 +11,8 @@ import dev.alimansour.iweather.domain.usecase.city.AddCityUseCase
 import dev.alimansour.iweather.domain.usecase.city.DeleteCityUseCase
 import dev.alimansour.iweather.domain.usecase.city.GetCitiesUseCase
 import dev.alimansour.iweather.util.ActionState
+import dev.alimansour.iweather.util.ConnectivityManager
 import dev.alimansour.iweather.util.Resource
-import dev.alimansour.iweather.util.isConnected
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +30,7 @@ import javax.inject.Singleton
  */
 class CitiesViewModel(
     private val app: Application,
+    private val connectivityManager: ConnectivityManager,
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
     private val deleteCityUseCase: DeleteCityUseCase,
@@ -51,7 +52,7 @@ class CitiesViewModel(
 
     fun addCity(cityName: String) =
         viewModelScope.launch(dispatcher + coroutineActionExceptionHandler) {
-            if (app.isConnected()) {
+            if (connectivityManager.isConnected()) {
                 runCatching {
                     addCityUseCase.execute(cityName)
                     _actionFlow.value = Resource.Success(ActionState.Add)
@@ -81,6 +82,7 @@ class CitiesViewModel(
 @Singleton
 class CitiesViewModelFactory @Inject constructor(
     private val app: Application,
+    private val connectivityManager: ConnectivityManager,
     private val getCitiesUseCase: GetCitiesUseCase,
     private val addCityUseCase: AddCityUseCase,
     private val deleteCityUseCase: DeleteCityUseCase,
@@ -92,6 +94,7 @@ class CitiesViewModelFactory @Inject constructor(
         if (modelClass.isAssignableFrom(CitiesViewModel::class.java)) {
             return CitiesViewModel(
                 app,
+                connectivityManager,
                 getCitiesUseCase,
                 addCityUseCase,
                 deleteCityUseCase,

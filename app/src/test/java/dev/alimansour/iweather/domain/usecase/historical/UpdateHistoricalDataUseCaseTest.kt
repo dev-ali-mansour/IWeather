@@ -1,16 +1,19 @@
 package dev.alimansour.iweather.domain.usecase.historical
 
 import com.google.common.truth.Truth.assertThat
+import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.aswan
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
 import dev.alimansour.iweather.TestUtil.luxor
-import dev.alimansour.iweather.data.local.entity.toModel
-import dev.alimansour.iweather.data.repository.FakeWeatherRepository
+import dev.alimansour.iweather.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -18,12 +21,12 @@ import org.junit.Test
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
 class UpdateHistoricalDataUseCaseTest {
-    private lateinit var weatherRepository: FakeWeatherRepository
+    private lateinit var weatherRepository: WeatherRepository
     private lateinit var updateHistoricalDataUseCase: UpdateHistoricalDataUseCase
 
     @Before
     fun setUp() {
-        weatherRepository = FakeWeatherRepository()
+        weatherRepository = Mockito.mock(WeatherRepository::class.java)
         updateHistoricalDataUseCase = UpdateHistoricalDataUseCase(weatherRepository)
     }
 
@@ -31,35 +34,44 @@ class UpdateHistoricalDataUseCaseTest {
     fun `when response is successful then return the right list of updated historical data`() =
         runBlocking {
             //GIVEN
-            val cairoData =
-                TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == cairo }
-                    .map { it.toModel() }
-            val gizaData =
-                TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == giza }
-                    .map { it.toModel() }
-            val luxorData =
-                TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == luxor }
-                    .map { it.toModel() }
+            val list = TEST_HISTORICAL_LIST.toMutableList()
+            val cairoData = list.filter { historical -> historical.city == cairo }
+            val gizaData = list.filter { historical -> historical.city == giza }
+            val luxorData = list.filter { historical -> historical.city == luxor }
+            val aswanData = list.filter { historical -> historical.city == aswan }
+
+            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+                list.clear()
+                list.addAll(TEST_UPDATED_HISTORICAL_LIST)
+            }
+            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+                .thenReturn(flow { emit(cairoData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(giza.id))
+                .thenReturn(flow { emit(gizaData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(luxor.id))
+                .thenReturn(flow { emit(luxorData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(aswan.id))
+                .thenReturn(flow { emit(aswanData) })
 
             //WHEN
             updateHistoricalDataUseCase.execute()
-            val cairoHistorical = weatherRepository.getHistoricalData(cairo.cityId).first()
-            val gizaHistorical = weatherRepository.getHistoricalData(giza.cityId).first()
-            val luxorHistorical = weatherRepository.getHistoricalData(luxor.cityId).first()
+            val cairoHistorical = weatherRepository.getHistoricalData(cairo.id).first()
+            val gizaHistorical = weatherRepository.getHistoricalData(giza.id).first()
+            val luxorHistorical = weatherRepository.getHistoricalData(luxor.id).first()
+            val aswanHistorical = weatherRepository.getHistoricalData(aswan.id).first()
 
             //THEN
             assertThat(cairoHistorical).isEqualTo(cairoData)
             assertThat(gizaHistorical).isEqualTo(gizaData)
             assertThat(luxorHistorical).isEqualTo(luxorData)
+            assertThat(aswanHistorical).isEqualTo(aswanData)
+            assertThat(aswanHistorical).isEmpty()
         }
 
     @Test(expected = Exception::class)
     fun `when response is unsuccessful then exception will be thrown`() = runBlocking {
         //GIVEN
-        weatherRepository.setSuccessful(false)
+        Mockito.`when`(weatherRepository.updateHistoricalData()).thenThrow(Exception())
 
         //WHEN
         updateHistoricalDataUseCase.execute()

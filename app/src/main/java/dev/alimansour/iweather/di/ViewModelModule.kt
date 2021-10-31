@@ -25,8 +25,7 @@ object ViewModelModule {
         activity: FragmentActivity,
         citiesViewModelFactory: CitiesViewModelFactory
     ): CitiesViewModel {
-        return ViewModelProvider(activity, citiesViewModelFactory)
-            .get(CitiesViewModel::class.java)
+        return ViewModelProvider(activity, citiesViewModelFactory)[CitiesViewModel::class.java]
     }
 
     @Provides
@@ -34,7 +33,9 @@ object ViewModelModule {
         activity: FragmentActivity,
         historicalViewModelFactory: HistoricalViewModelFactory
     ): HistoricalViewModel {
-        return ViewModelProvider(activity, historicalViewModelFactory)
-            .get(HistoricalViewModel::class.java)
+        return ViewModelProvider(
+            activity,
+            historicalViewModelFactory
+        )[HistoricalViewModel::class.java]
     }
 }

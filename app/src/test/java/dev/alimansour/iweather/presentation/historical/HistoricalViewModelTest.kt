@@ -7,23 +7,27 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.R
 import dev.alimansour.iweather.TestUtil
+import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
+import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
 import dev.alimansour.iweather.TestUtil.luxor
-import dev.alimansour.iweather.data.local.entity.toModel
-import dev.alimansour.iweather.data.repository.FakeWeatherRepository
+import dev.alimansour.iweather.domain.repository.WeatherRepository
 import dev.alimansour.iweather.domain.usecase.historical.GetHistoricalDataUseCase
 import dev.alimansour.iweather.domain.usecase.historical.UpdateHistoricalDataUseCase
 import dev.alimansour.iweather.presentation.MyApplication
+import dev.alimansour.iweather.util.ConnectivityManager
 import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.annotation.Config
 
 /**
@@ -36,7 +40,8 @@ import org.robolectric.annotation.Config
 @Config(sdk = [Build.VERSION_CODES.Q])
 class HistoricalViewModelTest {
     private lateinit var app: MyApplication
-    private lateinit var weatherRepository: FakeWeatherRepository
+    private lateinit var connectivityManager: ConnectivityManager
+    private lateinit var weatherRepository: WeatherRepository
     private lateinit var getHistoricalDataUseCase: GetHistoricalDataUseCase
     private lateinit var updateHistoricalDataUseCase: UpdateHistoricalDataUseCase
     private lateinit var historicalViewModel: HistoricalViewModel
@@ -48,13 +53,17 @@ class HistoricalViewModelTest {
     @Before
     fun setUp() {
         app = ApplicationProvider.getApplicationContext()
-        app.isForTest = true
-        weatherRepository = FakeWeatherRepository()
+        connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+        weatherRepository = Mockito.mock(WeatherRepository::class.java)
         getHistoricalDataUseCase = GetHistoricalDataUseCase(weatherRepository)
         updateHistoricalDataUseCase = UpdateHistoricalDataUseCase(weatherRepository)
         historicalViewModel =
             HistoricalViewModel(
-                app, getHistoricalDataUseCase, updateHistoricalDataUseCase, testDispatcher
+                app,
+                connectivityManager,
+                getHistoricalDataUseCase,
+                updateHistoricalDataUseCase,
+                testDispatcher
             )
     }
 
@@ -62,28 +71,28 @@ class HistoricalViewModelTest {
     fun `getHistorical() When response is successful Then return list of historical data`() =
         runBlocking {
             //GIVEN
-            val cachedHistorical =
-                TestUtil.TEST_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == cairo }
-                    .map { it.toModel() }
+            val data = TEST_HISTORICAL_LIST.filter { historical -> historical.city == cairo }
+            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+                .thenReturn(flow { emit(data) })
 
             //WHEN
-            historicalViewModel.getHistorical(cairo.cityId)
+            historicalViewModel.getHistorical(cairo.id)
             val result = historicalViewModel.historicalFlow.first()
 
             //THEN
             assertThat(result).isInstanceOf(Resource.Success::class.java)
-            assertThat(result.data).isEqualTo(cachedHistorical)
+            assertThat(result.data).isEqualTo(data)
         }
 
     @Test
     fun `getHistorical() When response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            weatherRepository.setSuccessful(false)
+            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+                .then { throw Exception("Failed to get historical!") }
 
             //WHEN
-            historicalViewModel.getHistorical(cairo.cityId)
+            historicalViewModel.getHistorical(cairo.id)
             val result = historicalViewModel.historicalFlow.first()
 
             //THEN
@@ -95,7 +104,7 @@ class HistoricalViewModelTest {
     fun `updateHistoricalData() When device is disconnected Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            app.connectedForTest = false
+            Mockito.`when`(connectivityManager.isConnected()).thenReturn(false)
 
             //WHEN
             historicalViewModel.updateHistoricalData()
@@ -107,10 +116,13 @@ class HistoricalViewModelTest {
         }
 
     @Test
-    fun `updateHistoricalData() response is un successful Then Resource Error is received`() =
+    fun `updateHistoricalData() When device is connected and response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            weatherRepository.setSuccessful(false)
+            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
+            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+                throw  Exception("Failed to update historical!")
+            }
 
             //WHEN
             historicalViewModel.updateHistoricalData()
@@ -125,28 +137,34 @@ class HistoricalViewModelTest {
     fun `updateHistoricalData() When device is connected and response is successful Then return list of new cached historical data`() =
         runBlocking {
             //GIVEN
-            val cairoData =
-                TestUtil.TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == cairo }
-                    .map { it.toModel() }
-            val gizaData =
-                TestUtil.TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == giza }
-                    .map { it.toModel() }
+            val list = TEST_HISTORICAL_LIST.toMutableList()
+            val cairoData = list.filter { historical -> historical.city == cairo }
+            val gizaData = list.filter { historical -> historical.city == giza }
+            val luxorData = list.filter { historical -> historical.city == luxor }
+            val aswanData = list.filter { historical -> historical.city == TestUtil.aswan }
 
-            val luxorData =
-                TestUtil.TEST_UPDATED_HISTORICAL_LIST
-                    .filter { historical -> historical.cityEntity == luxor }
-                    .map { it.toModel() }
+            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
+            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+                list.clear()
+                list.addAll(TEST_UPDATED_HISTORICAL_LIST)
+            }
+            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+                .thenReturn(flow { emit(cairoData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(giza.id))
+                .thenReturn(flow { emit(gizaData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(luxor.id))
+                .thenReturn(flow { emit(luxorData) })
+            Mockito.`when`(weatherRepository.getHistoricalData(TestUtil.aswan.id))
+                .thenReturn(flow { emit(aswanData) })
 
             //WHEN
             historicalViewModel.updateHistoricalData()
             val stateFlow = historicalViewModel.actionFlow.first()
-            historicalViewModel.getHistorical(cairo.cityId)
+            historicalViewModel.getHistorical(cairo.id)
             val cairoFlow = historicalViewModel.historicalFlow.first()
-            historicalViewModel.getHistorical(giza.cityId)
+            historicalViewModel.getHistorical(giza.id)
             val gizaFlow = historicalViewModel.historicalFlow.first()
-            historicalViewModel.getHistorical(luxor.cityId)
+            historicalViewModel.getHistorical(luxor.id)
             val luxorFlow = historicalViewModel.historicalFlow.first()
 
             //THEN

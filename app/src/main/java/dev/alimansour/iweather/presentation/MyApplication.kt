@@ -13,8 +13,6 @@ import timber.log.Timber
 
 @HiltAndroidApp
 class MyApplication : MultiDexApplication() {
-    var isForTest = false
-    var connectedForTest = true
 
     override fun onCreate() {
         super.onCreate()

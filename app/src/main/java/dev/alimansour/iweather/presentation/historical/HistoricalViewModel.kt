@@ -10,8 +10,8 @@ import dev.alimansour.iweather.domain.model.Historical
 import dev.alimansour.iweather.domain.usecase.historical.GetHistoricalDataUseCase
 import dev.alimansour.iweather.domain.usecase.historical.UpdateHistoricalDataUseCase
 import dev.alimansour.iweather.util.ActionState
+import dev.alimansour.iweather.util.ConnectivityManager
 import dev.alimansour.iweather.util.Resource
-import dev.alimansour.iweather.util.isConnected
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +29,7 @@ import javax.inject.Singleton
  */
 class HistoricalViewModel(
     private val app: Application,
+    private val connectivityManager: ConnectivityManager,
     private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
     private val updateHistoricalDataUseCase: UpdateHistoricalDataUseCase,
     private val dispatcher: CoroutineDispatcher
@@ -63,7 +64,7 @@ class HistoricalViewModel(
 
     fun updateHistoricalData() =
         viewModelScope.launch(dispatcher + coroutineActionExceptionHandler) {
-            if (app.isConnected()) {
+            if (connectivityManager.isConnected()) {
                 _actionFlow.value = Resource.Loading()
                 runCatching {
                     updateHistoricalDataUseCase.execute()
@@ -78,6 +79,7 @@ class HistoricalViewModel(
 @Singleton
 class HistoricalViewModelFactory @Inject constructor(
     private val app: Application,
+    private val connectivityManager: ConnectivityManager,
     private val getHistoricalDataUseCase: GetHistoricalDataUseCase,
     private val updateHistoricalDataUseCase: UpdateHistoricalDataUseCase,
     private val dispatcher: CoroutineDispatcher
@@ -86,7 +88,11 @@ class HistoricalViewModelFactory @Inject constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HistoricalViewModel::class.java)) {
             return HistoricalViewModel(
-                app, getHistoricalDataUseCase, updateHistoricalDataUseCase, dispatcher
+                app,
+                connectivityManager,
+                getHistoricalDataUseCase,
+                updateHistoricalDataUseCase,
+                dispatcher
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
