@@ -12,6 +12,7 @@ import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
 import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.data.local.WeatherDatabase
+import dev.alimansour.iweather.data.local.entity.toEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -50,14 +51,14 @@ class HistoricalEntityDaoTest {
     @Test
     fun insertListOfHistoricalData_returnListOfInsertedHistoricalData() = runBlocking {
         //GIVEN
-        val cairoList = TEST_HISTORICAL_LIST.filter { it.cityEntity.cityId == cairo.cityId }
-        val gizaList = TEST_HISTORICAL_LIST.filter { it.cityEntity.cityId == giza.cityId }
+        val cairoList = TEST_HISTORICAL_LIST.filter { it.city.id == cairo.id }.map { it.toEntity() }
+        val gizaList = TEST_HISTORICAL_LIST.filter { it.city.id == giza.id }.map { it.toEntity() }
 
         //WHEN
-        dao.insertList(TEST_HISTORICAL_LIST)
-        val cairoHistorical = dao.getHistoricalData(cairo.cityId).first()
-        val gizaHistorical = dao.getHistoricalData(giza.cityId).first()
-        val luxorHistorical = dao.getHistoricalData(luxor.cityId).first()
+        dao.insertList(TEST_HISTORICAL_LIST.map { it.toEntity() })
+        val cairoHistorical = dao.getHistoricalData(cairo.id).first()
+        val gizaHistorical = dao.getHistoricalData(giza.id).first()
+        val luxorHistorical = dao.getHistoricalData(luxor.id).first()
 
         //THEN
         assertThat(cairoHistorical).isNotNull()
@@ -72,12 +73,12 @@ class HistoricalEntityDaoTest {
     fun insertListOfHistoricalData_clearAllHistoricalData_returnEmptyHistoricalForAnyCity() =
         runBlocking {
             //WHEN
-            dao.insertList(TEST_HISTORICAL_LIST)
+            dao.insertList(TEST_HISTORICAL_LIST.map { it.toEntity() })
             dao.clearHistoricalData()
 
             //THEN
             TEST_CITY_LIST.forEach { city ->
-                val historical = dao.getHistoricalData(city.cityId).first()
+                val historical = dao.getHistoricalData(city.id).first()
                 assertThat(historical).isEmpty()
             }
         }
@@ -86,9 +87,9 @@ class HistoricalEntityDaoTest {
     fun insertListOfHistoricalData_clearCityHistoricalData_returnEmptyHistoricalForThisCity() =
         runBlocking {
             //WHEN
-            dao.insertList(TEST_HISTORICAL_LIST)
-            dao.clearCityHistoricalData(cairo.cityId)
-            val historical = dao.getHistoricalData(cairo.cityId).first()
+            dao.insertList(TEST_HISTORICAL_LIST.map { it.toEntity() })
+            dao.clearCityHistoricalData(cairo.id)
+            val historical = dao.getHistoricalData(cairo.id).first()
 
             //THEN
             assertThat(historical).isEmpty()
@@ -99,19 +100,19 @@ class HistoricalEntityDaoTest {
         runBlocking {
             //GIVEN
             val cairoList =
-                TEST_UPDATED_HISTORICAL_LIST.filter { it.cityEntity.cityId == cairo.cityId }
+                TEST_UPDATED_HISTORICAL_LIST.filter { it.city.id == cairo.id }.map { it.toEntity() }
             val gizaList =
-                TEST_UPDATED_HISTORICAL_LIST.filter { it.cityEntity.cityId == giza.cityId }
+                TEST_UPDATED_HISTORICAL_LIST.filter { it.city.id == giza.id }.map { it.toEntity() }
             val luxorList =
-                TEST_UPDATED_HISTORICAL_LIST.filter { it.cityEntity.cityId == luxor.cityId }
+                TEST_UPDATED_HISTORICAL_LIST.filter { it.city.id == luxor.id }.map { it.toEntity() }
 
             //WHEN
-            dao.insertList(TEST_HISTORICAL_LIST)
+            dao.insertList(TEST_HISTORICAL_LIST.map { it.toEntity() })
             dao.clearHistoricalData()
-            dao.insertList(TEST_UPDATED_HISTORICAL_LIST)
-            val cairoHistorical = dao.getHistoricalData(cairo.cityId).first()
-            val gizaHistorical = dao.getHistoricalData(giza.cityId).first()
-            val luxorHistorical = dao.getHistoricalData(luxor.cityId).first()
+            dao.insertList(TEST_UPDATED_HISTORICAL_LIST.map { it.toEntity() })
+            val cairoHistorical = dao.getHistoricalData(cairo.id).first()
+            val gizaHistorical = dao.getHistoricalData(giza.id).first()
+            val luxorHistorical = dao.getHistoricalData(luxor.id).first()
 
             //THEN
             assertThat(cairoHistorical).isNotNull()

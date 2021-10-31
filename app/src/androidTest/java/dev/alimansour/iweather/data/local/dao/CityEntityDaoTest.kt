@@ -10,6 +10,7 @@ import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
 import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.data.local.WeatherDatabase
+import dev.alimansour.iweather.data.local.entity.toEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -47,23 +48,26 @@ class CityEntityDaoTest {
 
     @Test
     fun insertCitiesThenGetCities_returnListOfInsertedCities() = runBlocking {
+        //GIVEN
+        val list = TEST_CITY_LIST.map { it.toEntity() }
+
         //WHEN
-        TEST_CITY_LIST.forEach { city -> dao.insert(city) }
+        TEST_CITY_LIST.forEach { city -> dao.insert(city.toEntity()) }
         val allCities = dao.getCities().first()
 
         //THEN
         assertThat(allCities).isNotNull()
-        assertThat(allCities).isEqualTo(TEST_CITY_LIST)
+        assertThat(allCities).isEqualTo(list)
     }
 
     @Test
     fun insertListOfCities_deleteCity_returnRightListOfCities() = runBlocking {
         //GIVEN
-        val updatedList = listOf(cairo, luxor)
+        val updatedList = listOf(cairo, luxor).map { it.toEntity() }
 
         //WHEN
-        TEST_CITY_LIST.forEach { city -> dao.insert(city) }
-        dao.delete(giza)
+        TEST_CITY_LIST.forEach { city -> dao.insert(city.toEntity()) }
+        dao.delete(giza.toEntity())
         val allCities = dao.getCities().first()
 
         //THEN
