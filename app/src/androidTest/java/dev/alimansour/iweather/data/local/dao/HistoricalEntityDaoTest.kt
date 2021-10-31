@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.TestUtil.TEST_CITY_ENTITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.cairo
@@ -76,7 +76,7 @@ class HistoricalEntityDaoTest {
             dao.clearHistoricalData()
 
             //THEN
-            TEST_CITY_ENTITY_LIST.forEach { city ->
+            TEST_CITY_LIST.forEach { city ->
                 val historical = dao.getHistoricalData(city.cityId).first()
                 assertThat(historical).isEmpty()
             }

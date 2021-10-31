@@ -13,7 +13,7 @@ object TestUtil {
     val giza = City(2, "Giza", "EG")
     val luxor = City(3, "Luxor", "EG")
     val aswan = City(4, "Aswan", "EG")
-    val TEST_CITY_ENTITY_LIST: List<City> = listOf(cairo, giza, luxor)
+    val TEST_CITY_LIST: List<City> = listOf(cairo, giza, luxor)
 
     private val historical1 =
         Historical(

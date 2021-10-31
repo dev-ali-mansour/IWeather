@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.R
-import dev.alimansour.iweather.TestUtil.TEST_CITY_ENTITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.TestUtil.aswan
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.domain.model.City
@@ -105,7 +105,7 @@ class CitiesViewModelTest {
         runBlocking {
             //GIVEN
             Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
-            val list = TEST_CITY_ENTITY_LIST.toMutableList()
+            val list = TEST_CITY_LIST.toMutableList()
             Mockito.`when`(weatherRepository.addCity(aswan.name)).then {
                 list.add(City(aswan.id, aswan.name, aswan.country))
             }
@@ -142,7 +142,7 @@ class CitiesViewModelTest {
     fun `deleteCity() When response is successful Then return list of updated saved cities After delete`() =
         runBlocking {
             //GIVEN
-            val list = TEST_CITY_ENTITY_LIST.toMutableList()
+            val list = TEST_CITY_LIST.toMutableList()
             Mockito.`when`(weatherRepository.deleteCity(cairo)).then {
                 list.remove(cairo)
             }
@@ -164,7 +164,7 @@ class CitiesViewModelTest {
     fun `getCities() When response is successful Then return list of saved cities`() = runBlocking {
         //GIVEN
         Mockito.`when`(weatherRepository.getCities()).thenReturn(flow {
-            emit(TEST_CITY_ENTITY_LIST)
+            emit(TEST_CITY_LIST)
         })
 
         //WHEN
@@ -173,7 +173,7 @@ class CitiesViewModelTest {
 
         //THEN
         assertThat(result).isInstanceOf(Resource.Success::class.java)
-        assertThat(result.data).isEqualTo(TEST_CITY_ENTITY_LIST)
+        assertThat(result.data).isEqualTo(TEST_CITY_LIST)
     }
 
     @Test

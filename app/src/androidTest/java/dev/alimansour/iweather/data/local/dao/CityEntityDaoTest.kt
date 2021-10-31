@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.TestUtil.TEST_CITY_ENTITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
 import dev.alimansour.iweather.TestUtil.luxor
@@ -48,12 +48,12 @@ class CityEntityDaoTest {
     @Test
     fun insertCitiesThenGetCities_returnListOfInsertedCities() = runBlocking {
         //WHEN
-        TEST_CITY_ENTITY_LIST.forEach { city -> dao.insert(city) }
+        TEST_CITY_LIST.forEach { city -> dao.insert(city) }
         val allCities = dao.getCities().first()
 
         //THEN
         assertThat(allCities).isNotNull()
-        assertThat(allCities).isEqualTo(TEST_CITY_ENTITY_LIST)
+        assertThat(allCities).isEqualTo(TEST_CITY_LIST)
     }
 
     @Test
@@ -62,7 +62,7 @@ class CityEntityDaoTest {
         val updatedList = listOf(cairo, luxor)
 
         //WHEN
-        TEST_CITY_ENTITY_LIST.forEach { city -> dao.insert(city) }
+        TEST_CITY_LIST.forEach { city -> dao.insert(city) }
         dao.delete(giza)
         val allCities = dao.getCities().first()
 

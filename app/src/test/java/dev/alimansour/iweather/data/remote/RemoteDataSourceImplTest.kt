@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-class WeatherAPIServiceTest {
+class RemoteDataSourceImplTest {
     private lateinit var service: WeatherAPIService
     private lateinit var server: MockWebServer
     private val fileName = "historical_response.json"

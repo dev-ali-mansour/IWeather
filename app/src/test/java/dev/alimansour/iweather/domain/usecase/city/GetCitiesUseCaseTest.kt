@@ -1,7 +1,7 @@
 package dev.alimansour.iweather.domain.usecase.city
 
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.TestUtil.TEST_CITY_ENTITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -29,14 +29,14 @@ class GetCitiesUseCaseTest {
     fun `When response is not successful Then return the right list of cities`() = runBlocking {
         //GIVEN
         Mockito.`when`(weatherRepository.getCities()).thenReturn(flow {
-            emit(TEST_CITY_ENTITY_LIST)
+            emit(TEST_CITY_LIST)
         })
 
         //WHEN
         val cities = getCitiesUseCase.execute().first()
 
         //THEN
-        assertThat(cities).isEqualTo(TEST_CITY_ENTITY_LIST)
+        assertThat(cities).isEqualTo(TEST_CITY_LIST)
     }
 
     @Test(expected = Exception::class)

@@ -1,7 +1,7 @@
 package dev.alimansour.iweather.domain.usecase.city
 
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.TestUtil.TEST_CITY_ENTITY_LIST
+import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.TestUtil.aswan
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
@@ -33,7 +33,7 @@ class AddCityUseCaseTest {
     @Test
     fun `When response is successful Then return the right list of cities`() = runBlocking {
         //GIVEN
-        val list = TEST_CITY_ENTITY_LIST.toMutableList()
+        val list = TEST_CITY_LIST.toMutableList()
         Mockito.`when`(weatherRepository.addCity(aswan.name)).then {
             list.add(City(aswan.id, aswan.name, aswan.country))
         }
