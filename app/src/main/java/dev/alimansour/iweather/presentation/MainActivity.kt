@@ -7,7 +7,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -25,6 +27,7 @@ import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.dp
 import dev.alimansour.iweather.util.hideKeyboard
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -85,7 +88,11 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        lifecycleScope.launchWhenStarted { collectActionFlow() }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                collectActionFlow()
+            }
+        }
 
         binding.fab.setOnClickListener { view ->
             view.visibility = View.GONE

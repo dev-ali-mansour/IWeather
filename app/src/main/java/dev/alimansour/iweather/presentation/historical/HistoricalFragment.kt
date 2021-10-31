@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,6 +15,7 @@ import dev.alimansour.iweather.databinding.FragmentHistoricalBinding
 import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,8 +35,6 @@ class HistoricalFragment : Fragment() {
     @Inject
     lateinit var historicalViewModel: HistoricalViewModel
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -53,9 +54,11 @@ class HistoricalFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = historicalAdapter
 
-            lifecycleScope.launchWhenStarted {
-                collectHistoricalFlow()
-                collectActionFlow()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    collectHistoricalFlow()
+                    collectActionFlow()
+                }
             }
         }
 

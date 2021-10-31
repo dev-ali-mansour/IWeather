@@ -83,7 +83,7 @@ class HistoricalViewModelFactory @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HistoricalViewModel::class.java)) {
             return HistoricalViewModel(
                 app, getHistoricalDataUseCase, updateHistoricalDataUseCase, dispatcher

@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,7 @@ import dev.alimansour.iweather.databinding.FragmentCitiesBinding
 import dev.alimansour.iweather.presentation.MainActivity
 import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -34,8 +37,6 @@ class CitiesFragment : Fragment() {
     @Inject
     lateinit var viewModel: CitiesViewModel
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -50,7 +51,11 @@ class CitiesFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = citiesAdapter
 
-            lifecycleScope.launchWhenStarted { collectCitiesFlow() }
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    collectCitiesFlow()
+                }
+            }
 
             viewModel.getCities()
             initSwipeToDelete()
@@ -59,6 +64,9 @@ class CitiesFragment : Fragment() {
         }
     }
 
+    /**
+     * Initialize SwipeToDelete feature in cities RecyclerView
+     **/
     private fun initSwipeToDelete() {
         val itemTouchHelperCallBack = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -96,7 +104,7 @@ class CitiesFragment : Fragment() {
     /**
      * Collect citiesFlow from CitiesViewModel
      * Load data into RecyclerView if response is successful
-     */
+     **/
     private suspend fun collectCitiesFlow() {
         val mainActivity = requireActivity() as MainActivity
         viewModel.citiesFlow.collect { resource ->
