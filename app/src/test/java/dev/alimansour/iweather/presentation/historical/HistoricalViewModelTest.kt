@@ -33,7 +33,6 @@ import org.mockito.junit.MockitoJUnitRunner
  */
 @RunWith(MockitoJUnitRunner::class)
 @ExperimentalCoroutinesApi
-//@Config(sdk = [Build.VERSION_CODES.Q])
 class HistoricalViewModelTest {
     private lateinit var app: Application
     private lateinit var connectivityManager: ConnectivityManager
@@ -49,7 +48,6 @@ class HistoricalViewModelTest {
     @Before
     fun setUp() {
         app = Mockito.mock(Application::class.java)
-        //app = ApplicationProvider.getApplicationContext()
         connectivityManager = Mockito.mock(ConnectivityManager::class.java)
         weatherRepository = Mockito.mock(WeatherRepository::class.java)
         getHistoricalDataUseCase = GetHistoricalDataUseCase(weatherRepository)

@@ -33,7 +33,6 @@ import org.mockito.junit.MockitoJUnitRunner
  */
 @RunWith(MockitoJUnitRunner::class)
 @ExperimentalCoroutinesApi
-//@Config(sdk = [Build.VERSION_CODES.Q])
 class CitiesViewModelTest {
     private lateinit var app: Application
     private lateinit var connectivityManager: ConnectivityManager
