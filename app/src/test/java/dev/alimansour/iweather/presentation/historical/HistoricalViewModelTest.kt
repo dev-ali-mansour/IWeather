@@ -1,12 +1,9 @@
 package dev.alimansour.iweather.presentation.historical
 
-import android.os.Build
+import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import dev.alimansour.iweather.R
-import dev.alimansour.iweather.TestUtil
 import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.TEST_UPDATED_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.cairo
@@ -15,7 +12,6 @@ import dev.alimansour.iweather.TestUtil.luxor
 import dev.alimansour.iweather.domain.repository.WeatherRepository
 import dev.alimansour.iweather.domain.usecase.historical.GetHistoricalDataUseCase
 import dev.alimansour.iweather.domain.usecase.historical.UpdateHistoricalDataUseCase
-import dev.alimansour.iweather.presentation.MyApplication
 import dev.alimansour.iweather.util.ConnectivityManager
 import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,18 +24,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.robolectric.annotation.Config
+import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
  * ----------------- WeatherApp IS FREE SOFTWARE -------------------
  * https://www.alimansour.dev   |   mailto:dev.ali.mansour@gmail.com
  */
-@RunWith(AndroidJUnit4::class)
+@RunWith(MockitoJUnitRunner::class)
 @ExperimentalCoroutinesApi
-@Config(sdk = [Build.VERSION_CODES.Q])
+//@Config(sdk = [Build.VERSION_CODES.Q])
 class HistoricalViewModelTest {
-    private lateinit var app: MyApplication
+    private lateinit var app: Application
     private lateinit var connectivityManager: ConnectivityManager
     private lateinit var weatherRepository: WeatherRepository
     private lateinit var getHistoricalDataUseCase: GetHistoricalDataUseCase
@@ -52,7 +48,8 @@ class HistoricalViewModelTest {
 
     @Before
     fun setUp() {
-        app = ApplicationProvider.getApplicationContext()
+        app = Mockito.mock(Application::class.java)
+        //app = ApplicationProvider.getApplicationContext()
         connectivityManager = Mockito.mock(ConnectivityManager::class.java)
         weatherRepository = Mockito.mock(WeatherRepository::class.java)
         getHistoricalDataUseCase = GetHistoricalDataUseCase(weatherRepository)
@@ -105,6 +102,8 @@ class HistoricalViewModelTest {
         runBlocking {
             //GIVEN
             Mockito.`when`(connectivityManager.isConnected()).thenReturn(false)
+            Mockito.`when`(app.getString(R.string.device_not_connected))
+                .thenReturn("Oops! You are not connected to the internet.")
 
             //WHEN
             historicalViewModel.updateHistoricalData()
@@ -141,7 +140,6 @@ class HistoricalViewModelTest {
             val cairoData = list.filter { historical -> historical.city == cairo }
             val gizaData = list.filter { historical -> historical.city == giza }
             val luxorData = list.filter { historical -> historical.city == luxor }
-            val aswanData = list.filter { historical -> historical.city == TestUtil.aswan }
 
             Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
             Mockito.`when`(weatherRepository.updateHistoricalData()).then {
@@ -154,8 +152,6 @@ class HistoricalViewModelTest {
                 .thenReturn(flow { emit(gizaData) })
             Mockito.`when`(weatherRepository.getHistoricalData(luxor.id))
                 .thenReturn(flow { emit(luxorData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(TestUtil.aswan.id))
-                .thenReturn(flow { emit(aswanData) })
 
             //WHEN
             historicalViewModel.updateHistoricalData()

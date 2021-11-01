@@ -25,7 +25,6 @@ buildscript {
         mockito_version = '4.0.0'
         androidX_test_rules_version = "1.4.0"
         robolectric_version = '4.6.1'
-
     }
     repositories {
         google()
