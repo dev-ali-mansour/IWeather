@@ -139,4 +139,5 @@ dependencies {
     androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
     androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
 }
