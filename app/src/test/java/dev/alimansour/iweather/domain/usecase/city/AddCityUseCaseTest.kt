@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -26,7 +27,7 @@ class AddCityUseCaseTest {
 
     @Before
     fun setUp() {
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         addCityUseCase = AddCityUseCase(weatherRepository)
     }
 
@@ -34,10 +35,10 @@ class AddCityUseCaseTest {
     fun `When response is successful Then return the right list of cities`() = runBlocking {
         //GIVEN
         val list = TEST_CITY_LIST.toMutableList()
-        Mockito.`when`(weatherRepository.addCity(aswan.name)).then {
+        `when`(weatherRepository.addCity(aswan.name)).then {
             list.add(City(aswan.id, aswan.name, aswan.country))
         }
-        Mockito.`when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
+        `when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
 
         //WHEN
         addCityUseCase.execute(aswan.name)
@@ -50,11 +51,9 @@ class AddCityUseCaseTest {
     @Test(expected = Exception::class)
     fun `When response is not successful Then throw exception`() = runBlocking {
         //GIVEN
-        Mockito.`when`(addCityUseCase.execute(aswan.name)).thenThrow(Exception())
+        `when`(addCityUseCase.execute(aswan.name)).then { throw (Exception()) }
 
         //WHEN
         addCityUseCase.execute(aswan.name)
-
-        //THEN Exception is thrown
     }
 }

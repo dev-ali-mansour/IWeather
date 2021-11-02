@@ -1,9 +1,9 @@
 package dev.alimansour.iweather.data.local
 
 import com.google.common.truth.Truth.assertThat
+import dev.alimansour.iweather.TestUtil.TEST_ASWAN_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.TEST_CITY_LIST
 import dev.alimansour.iweather.TestUtil.TEST_HISTORICAL_LIST
-import dev.alimansour.iweather.TestUtil.TEST_INSERT_HISTORICAL_LIST
 import dev.alimansour.iweather.TestUtil.aswan
 import dev.alimansour.iweather.TestUtil.cairo
 import dev.alimansour.iweather.TestUtil.giza
@@ -42,7 +42,7 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `addCity() When getCities() Return List of saved cities`() = runBlocking() {
+    fun `addCity() When getCities() Return List of saved cities`() = runBlocking {
         //GIVEN
         Mockito.`when`(cityDao.insert(aswan.toEntity())).then {
             savedCities.add(aswan.toEntity())
@@ -65,7 +65,7 @@ class LocalDataSourceImplTest {
     }
 
     @Test(expected = Exception::class)
-    fun `addCity() When exception is thrown Then Catch that exception`() = runBlocking() {
+    fun `addCity() When exception is thrown Then Catch that exception`() = runBlocking {
         //GIVEN
         Mockito.`when`(cityDao.insert(aswan.toEntity())).then { throw Exception() }
 
@@ -74,7 +74,7 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `deleteCity() Then delete city and it's historical data from database`() = runBlocking() {
+    fun `deleteCity() Then delete city and it's historical data from database`() = runBlocking {
         //GIVEN
         Mockito.`when`(cityDao.delete(cairo.toEntity())).then {
             savedCities.remove(cairo.toEntity())
@@ -100,7 +100,7 @@ class LocalDataSourceImplTest {
     }
 
     @Test(expected = Exception::class)
-    fun `deleteCity() When exception is thrown Then Catch that exception`() = runBlocking() {
+    fun `deleteCity() When exception is thrown Then Catch that exception`() = runBlocking {
         //GIVEN
         Mockito.`when`(cityDao.delete(aswan.toEntity())).then { throw Exception() }
 
@@ -109,7 +109,7 @@ class LocalDataSourceImplTest {
     }
 
     @Test(expected = Exception::class)
-    fun `getCities() When exception is thrown Then Catch that exception`() = runBlocking() {
+    fun `getCities() When exception is thrown Then Catch that exception`() = runBlocking {
         //GIVEN
         Mockito.`when`(cityDao.getCities()).then { throw Exception() }
 
@@ -122,10 +122,10 @@ class LocalDataSourceImplTest {
 
     @Test
     fun `addHistoricalData() When getHistoricalData() Return List of correct saved historical data`() =
-        runBlocking() {
+        runBlocking {
             //GIVEN
-            Mockito.`when`(historicalDao.insertList(TEST_INSERT_HISTORICAL_LIST)).then {
-                savedHistorical.addAll(TEST_INSERT_HISTORICAL_LIST)
+            Mockito.`when`(historicalDao.insertList(TEST_ASWAN_HISTORICAL_LIST)).then {
+                savedHistorical.addAll(TEST_ASWAN_HISTORICAL_LIST)
             }
             Mockito.`when`(historicalDao.getHistoricalData(cairo.id))
                 .thenReturn(flow { emit(savedHistorical.filter { it.cityEntity == cairo.toEntity() }) })
@@ -137,7 +137,7 @@ class LocalDataSourceImplTest {
                 .thenReturn(flow { emit(savedHistorical.filter { it.cityEntity == aswan.toEntity() }) })
 
             //WHEN
-            localDataSource.addHistoricalData(TEST_INSERT_HISTORICAL_LIST)
+            localDataSource.addHistoricalData(TEST_ASWAN_HISTORICAL_LIST)
             val cairoHistorical = localDataSource.getHistoricalData(cairo.id).first()
             val gizaHistorical = localDataSource.getHistoricalData(giza.id).first()
             val luxorHistorical = localDataSource.getHistoricalData(luxor.id).first()
@@ -155,18 +155,18 @@ class LocalDataSourceImplTest {
         }
 
     @Test(expected = Exception::class)
-    fun `addHistoricalData() When exception is thrown Then Catch that exception`() = runBlocking() {
+    fun `addHistoricalData() When exception is thrown Then Catch that exception`() = runBlocking {
         //GIVEN
-        Mockito.`when`(historicalDao.insertList(TEST_INSERT_HISTORICAL_LIST))
+        Mockito.`when`(historicalDao.insertList(TEST_ASWAN_HISTORICAL_LIST))
             .then { throw Exception() }
 
         //WHEN
-        localDataSource.addHistoricalData(TEST_INSERT_HISTORICAL_LIST)
+        localDataSource.addHistoricalData(TEST_ASWAN_HISTORICAL_LIST)
     }
 
     @Test
     fun `clearCachedHistoricalData() When getHistoricalData() Then Return empty list of historical data`() =
-        runBlocking() {
+        runBlocking {
             //GIVEN
             Mockito.`when`(historicalDao.clearHistoricalData())
                 .then { savedHistorical.clear() }
@@ -188,7 +188,7 @@ class LocalDataSourceImplTest {
 
     @Test(expected = Exception::class)
     fun `clearCachedHistoricalData() When exception is thrown Then Catch that exception`() =
-        runBlocking() {
+        runBlocking {
             //GIVEN
             Mockito.`when`(historicalDao.clearHistoricalData())
                 .then { throw Exception() }

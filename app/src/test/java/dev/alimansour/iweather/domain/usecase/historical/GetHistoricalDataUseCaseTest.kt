@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -22,7 +23,7 @@ class GetHistoricalDataUseCaseTest {
 
     @Before
     fun setUp() {
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         getHistoricalDataUseCase = GetHistoricalDataUseCase(weatherRepository)
     }
 
@@ -31,7 +32,7 @@ class GetHistoricalDataUseCaseTest {
         runBlocking {
             //GIVEN
             val data = TEST_HISTORICAL_LIST.filter { historical -> historical.city == cairo }
-            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+            `when`(weatherRepository.getHistoricalData(cairo.id))
                 .thenReturn(flow { emit(data) })
 
             //WHEN
@@ -44,7 +45,7 @@ class GetHistoricalDataUseCaseTest {
     @Test(expected = Exception::class)
     fun `when response is unsuccessful then exception will be thrown`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.getHistoricalData(cairo.id)).thenThrow(Exception())
+        `when`(weatherRepository.getHistoricalData(cairo.id)).then { throw (Exception()) }
 
         //WHEN
         val historicalData = getHistoricalDataUseCase.execute(cairo.id).first()

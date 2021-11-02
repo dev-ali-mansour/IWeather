@@ -23,7 +23,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 /**
@@ -48,9 +49,9 @@ class CitiesViewModelTest {
 
     @Before
     fun setUp() {
-        app = Mockito.mock(Application::class.java)
-        connectivityManager = Mockito.mock(ConnectivityManager::class.java)
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        app = mock(Application::class.java)
+        connectivityManager = mock(ConnectivityManager::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         getCitiesUseCase = GetCitiesUseCase(weatherRepository)
         addCityUseCae = AddCityUseCase(weatherRepository)
         deleteCityUseCase = DeleteCityUseCase(weatherRepository)
@@ -68,8 +69,8 @@ class CitiesViewModelTest {
     @Test
     fun `addCity() When device is disconnected Then Resource Error is received`() = runBlocking {
         //GIVEN
-        Mockito.`when`(connectivityManager.isConnected()).thenReturn(false)
-        Mockito.`when`(app.getString(R.string.device_not_connected))
+        `when`(connectivityManager.isConnected()).thenReturn(false)
+        `when`(app.getString(R.string.device_not_connected))
             .thenReturn("Oops! You are not connected to the internet.")
 
         //WHEN
@@ -85,8 +86,8 @@ class CitiesViewModelTest {
     fun `addCity() When device is connected and response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
-            Mockito.`when`(weatherRepository.addCity(aswan.name))
+            `when`(connectivityManager.isConnected()).thenReturn(true)
+            `when`(weatherRepository.addCity(aswan.name))
                 .then { throw Exception("Failed to add city!") }
 
             //WHEN
@@ -102,12 +103,12 @@ class CitiesViewModelTest {
     fun `addCity() When device is connected and response is successful Then return list of new saved cities`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
+            `when`(connectivityManager.isConnected()).thenReturn(true)
             val list = TEST_CITY_LIST.toMutableList()
-            Mockito.`when`(weatherRepository.addCity(aswan.name)).then {
+            `when`(weatherRepository.addCity(aswan.name)).then {
                 list.add(City(aswan.id, aswan.name, aswan.country))
             }
-            Mockito.`when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
+            `when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
 
             //WHEN
             citiesViewModel.addCity(aswan.name)
@@ -124,7 +125,7 @@ class CitiesViewModelTest {
     @Test
     fun `deleteCity() response is un successful Then Resource Error is received`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.deleteCity(cairo))
+        `when`(weatherRepository.deleteCity(cairo))
             .then { throw Exception("Failed to delete city!") }
 
         //WHEN
@@ -141,10 +142,10 @@ class CitiesViewModelTest {
         runBlocking {
             //GIVEN
             val list = TEST_CITY_LIST.toMutableList()
-            Mockito.`when`(weatherRepository.deleteCity(cairo)).then {
+            `when`(weatherRepository.deleteCity(cairo)).then {
                 list.remove(cairo)
             }
-            Mockito.`when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
+            `when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
 
             //WHEN
             citiesViewModel.deleteCity(cairo)
@@ -161,7 +162,7 @@ class CitiesViewModelTest {
     @Test
     fun `getCities() When response is successful Then return list of saved cities`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.getCities()).thenReturn(flow {
+        `when`(weatherRepository.getCities()).thenReturn(flow {
             emit(TEST_CITY_LIST)
         })
 
@@ -178,7 +179,7 @@ class CitiesViewModelTest {
     fun `getCities() When response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(weatherRepository.getCities())
+            `when`(weatherRepository.getCities())
                 .then { throw Exception("Failed to get cities!") }
 
             //WHEN

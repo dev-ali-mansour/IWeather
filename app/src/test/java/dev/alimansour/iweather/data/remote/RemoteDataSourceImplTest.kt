@@ -1,24 +1,19 @@
 package dev.alimansour.iweather.data.remote
 
 import com.google.common.truth.Truth.assertThat
-import dev.alimansour.iweather.BuildConfig
 import dev.alimansour.iweather.data.remote.response.Main
 import dev.alimansour.iweather.data.remote.response.WeatherData
 import dev.alimansour.iweather.data.remote.response.WeatherItem
 import dev.alimansour.iweather.data.remote.response.Wind
+import dev.alimansour.iweather.enqueueMockResponse
+import dev.alimansour.iweather.okHttpClient
 import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okio.buffer
-import okio.source
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -29,28 +24,6 @@ class RemoteDataSourceImplTest {
     private lateinit var service: WeatherAPIService
     private lateinit var server: MockWebServer
     private val fileName = "historical_response.json"
-    private val interceptor = Interceptor { chain ->
-        val url = chain.request()
-            .url
-            .newBuilder()
-            .addQueryParameter("appid", BuildConfig.API_KEY)
-            .addQueryParameter("units", "metric")
-            .build()
-        val request = chain.request()
-            .newBuilder()
-            .url(url)
-            .build()
-
-        return@Interceptor chain.proceed(request)
-    }
-
-    private val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(1, TimeUnit.MINUTES)
-        .readTimeout(1, TimeUnit.MINUTES)
-        .writeTimeout(1, TimeUnit.MINUTES)
-        .retryOnConnectionFailure(true)
-        .addInterceptor(interceptor)
-        .build()
 
     @Before
     fun setUp() {
@@ -75,7 +48,7 @@ class RemoteDataSourceImplTest {
             val path = "/forecast?q=cairo&appid=ddbbb032375d79f1670080b110a8f45e&units=metric"
 
             //WHEN
-            enqueueMockResponse()
+            enqueueMockResponse(fileName,server)
             service.getHistoricalData("cairo").body()
             val request = server.takeRequest()
 
@@ -88,7 +61,7 @@ class RemoteDataSourceImplTest {
     fun `getHistoricalData() When receiveResponse then response body is not null`() {
         runBlocking {
             //WHEN
-            enqueueMockResponse()
+            enqueueMockResponse(fileName,server)
             val responseBody = service.getHistoricalData("cairo").body()
 
             //THEN
@@ -108,7 +81,7 @@ class RemoteDataSourceImplTest {
             )
 
             //WHEN
-            enqueueMockResponse()
+            enqueueMockResponse(fileName,server)
             val responseBody = service.getHistoricalData("cairo").body()
             val historicalItems = responseBody!!.list
             val item = historicalItems!![0]
@@ -116,13 +89,5 @@ class RemoteDataSourceImplTest {
             //THEN
             assertThat(item).isEqualTo(data)
         }
-    }
-
-    private fun enqueueMockResponse() {
-        val inputStream = javaClass.classLoader!!.getResourceAsStream(fileName)
-        val source = inputStream.source().buffer()
-        val mockResponse = MockResponse()
-        mockResponse.setBody(source.readString(Charsets.UTF_8))
-        server.enqueue(mockResponse)
     }
 }

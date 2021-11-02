@@ -6,16 +6,14 @@ import dev.alimansour.iweather.data.local.entity.HistoricalEntity
 import dev.alimansour.iweather.data.local.entity.toEntity
 import dev.alimansour.iweather.data.local.entity.toModel
 import dev.alimansour.iweather.data.remote.RemoteDataSource
-import dev.alimansour.iweather.data.remote.response.HistoricalResponse
 import dev.alimansour.iweather.data.remote.response.WeatherData
+import dev.alimansour.iweather.data.util.toResource
 import dev.alimansour.iweather.domain.model.City
 import dev.alimansour.iweather.domain.model.Historical
 import dev.alimansour.iweather.domain.repository.WeatherRepository
-import dev.alimansour.iweather.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import retrofit2.Response
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -28,7 +26,7 @@ class WeatherRepositoryImpl(
 ) :
     WeatherRepository {
     override suspend fun addCity(cityName: String) {
-        val resource = responseToResource(remoteDataSource.fetchHistoricalData(cityName))
+        val resource = remoteDataSource.fetchHistoricalData(cityName).toResource()
         resource.data?.let { response ->
             val city = CityEntity(
                 response.city.id,
@@ -54,7 +52,7 @@ class WeatherRepositoryImpl(
         localDataSource.clearCachedHistoricalData()
         localDataSource.getCities().collect { cities ->
             cities.map { city ->
-                val resource = responseToResource(remoteDataSource.fetchHistoricalData(city.name))
+                val resource = remoteDataSource.fetchHistoricalData(city.name).toResource()
                 resource.data?.let { response ->
                     response.list?.let { list ->
                         val dataList = getHistoricalList(city, list)
@@ -69,20 +67,6 @@ class WeatherRepositoryImpl(
         localDataSource.getHistoricalData(id).map { list ->
             list.map { it.toModel() }
         }
-
-    /**
-     * Convert Retrofit response to Resource
-     * @param response Retrofit Response of HistoricalResponse
-     * @return Resource of HistoricalResponse
-     */
-    private fun responseToResource(response: Response<HistoricalResponse>): Resource<HistoricalResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { result ->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(response.message())
-    }
 
     /**
      * Get list of historical items using city and it's list of WeatherData

@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -26,7 +27,7 @@ class UpdateHistoricalDataUseCaseTest {
 
     @Before
     fun setUp() {
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         updateHistoricalDataUseCase = UpdateHistoricalDataUseCase(weatherRepository)
     }
 
@@ -40,17 +41,17 @@ class UpdateHistoricalDataUseCaseTest {
             val luxorData = list.filter { historical -> historical.city == luxor }
             val aswanData = list.filter { historical -> historical.city == aswan }
 
-            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+            `when`(weatherRepository.updateHistoricalData()).then {
                 list.clear()
                 list.addAll(TEST_UPDATED_HISTORICAL_LIST)
             }
-            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+            `when`(weatherRepository.getHistoricalData(cairo.id))
                 .thenReturn(flow { emit(cairoData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(giza.id))
+            `when`(weatherRepository.getHistoricalData(giza.id))
                 .thenReturn(flow { emit(gizaData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(luxor.id))
+            `when`(weatherRepository.getHistoricalData(luxor.id))
                 .thenReturn(flow { emit(luxorData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(aswan.id))
+            `when`(weatherRepository.getHistoricalData(aswan.id))
                 .thenReturn(flow { emit(aswanData) })
 
             //WHEN
@@ -71,7 +72,7 @@ class UpdateHistoricalDataUseCaseTest {
     @Test(expected = Exception::class)
     fun `when response is unsuccessful then exception will be thrown`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.updateHistoricalData()).thenThrow(Exception())
+        `when`(weatherRepository.updateHistoricalData()).then { throw (Exception()) }
 
         //WHEN
         updateHistoricalDataUseCase.execute()

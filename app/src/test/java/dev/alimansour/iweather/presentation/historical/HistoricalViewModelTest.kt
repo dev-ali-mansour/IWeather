@@ -23,7 +23,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 /**
@@ -47,9 +48,9 @@ class HistoricalViewModelTest {
 
     @Before
     fun setUp() {
-        app = Mockito.mock(Application::class.java)
-        connectivityManager = Mockito.mock(ConnectivityManager::class.java)
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        app = mock(Application::class.java)
+        connectivityManager = mock(ConnectivityManager::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         getHistoricalDataUseCase = GetHistoricalDataUseCase(weatherRepository)
         updateHistoricalDataUseCase = UpdateHistoricalDataUseCase(weatherRepository)
         historicalViewModel =
@@ -67,7 +68,7 @@ class HistoricalViewModelTest {
         runBlocking {
             //GIVEN
             val data = TEST_HISTORICAL_LIST.filter { historical -> historical.city == cairo }
-            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+            `when`(weatherRepository.getHistoricalData(cairo.id))
                 .thenReturn(flow { emit(data) })
 
             //WHEN
@@ -83,7 +84,7 @@ class HistoricalViewModelTest {
     fun `getHistorical() When response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+            `when`(weatherRepository.getHistoricalData(cairo.id))
                 .then { throw Exception("Failed to get historical!") }
 
             //WHEN
@@ -99,8 +100,8 @@ class HistoricalViewModelTest {
     fun `updateHistoricalData() When device is disconnected Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(connectivityManager.isConnected()).thenReturn(false)
-            Mockito.`when`(app.getString(R.string.device_not_connected))
+            `when`(connectivityManager.isConnected()).thenReturn(false)
+            `when`(app.getString(R.string.device_not_connected))
                 .thenReturn("Oops! You are not connected to the internet.")
 
             //WHEN
@@ -116,8 +117,8 @@ class HistoricalViewModelTest {
     fun `updateHistoricalData() When device is connected and response is un successful Then Resource Error is received`() =
         runBlocking {
             //GIVEN
-            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
-            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+            `when`(connectivityManager.isConnected()).thenReturn(true)
+            `when`(weatherRepository.updateHistoricalData()).then {
                 throw  Exception("Failed to update historical!")
             }
 
@@ -139,16 +140,16 @@ class HistoricalViewModelTest {
             val gizaData = list.filter { historical -> historical.city == giza }
             val luxorData = list.filter { historical -> historical.city == luxor }
 
-            Mockito.`when`(connectivityManager.isConnected()).thenReturn(true)
-            Mockito.`when`(weatherRepository.updateHistoricalData()).then {
+            `when`(connectivityManager.isConnected()).thenReturn(true)
+            `when`(weatherRepository.updateHistoricalData()).then {
                 list.clear()
                 list.addAll(TEST_UPDATED_HISTORICAL_LIST)
             }
-            Mockito.`when`(weatherRepository.getHistoricalData(cairo.id))
+            `when`(weatherRepository.getHistoricalData(cairo.id))
                 .thenReturn(flow { emit(cairoData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(giza.id))
+            `when`(weatherRepository.getHistoricalData(giza.id))
                 .thenReturn(flow { emit(gizaData) })
-            Mockito.`when`(weatherRepository.getHistoricalData(luxor.id))
+            `when`(weatherRepository.getHistoricalData(luxor.id))
                 .thenReturn(flow { emit(luxorData) })
 
             //WHEN

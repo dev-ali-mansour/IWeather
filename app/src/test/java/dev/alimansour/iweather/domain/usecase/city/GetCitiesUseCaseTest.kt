@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -21,14 +22,14 @@ class GetCitiesUseCaseTest {
 
     @Before
     fun setUp() {
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         getCitiesUseCase = GetCitiesUseCase(weatherRepository)
     }
 
     @Test
     fun `When response is not successful Then return the right list of cities`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.getCities()).thenReturn(flow {
+        `when`(weatherRepository.getCities()).thenReturn(flow {
             emit(TEST_CITY_LIST)
         })
 
@@ -42,7 +43,7 @@ class GetCitiesUseCaseTest {
     @Test(expected = Exception::class)
     fun `When response is not successful Then throw exception`() = runBlocking {
         //GIVEN
-        Mockito.`when`(getCitiesUseCase.execute()).thenThrow(Exception())
+        `when`(getCitiesUseCase.execute()).then { throw (Exception()) }
 
         //WHEN
         val cities = getCitiesUseCase.execute().first()

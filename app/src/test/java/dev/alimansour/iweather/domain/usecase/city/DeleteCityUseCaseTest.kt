@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /**
  * WeatherApp Android Application developed by: Ali Mansour
@@ -22,7 +23,7 @@ class DeleteCityUseCaseTest {
 
     @Before
     fun setUp() {
-        weatherRepository = Mockito.mock(WeatherRepository::class.java)
+        weatherRepository = mock(WeatherRepository::class.java)
         deleteCityUseCase = DeleteCityUseCase(weatherRepository)
     }
 
@@ -30,10 +31,10 @@ class DeleteCityUseCaseTest {
     fun `When response is successful Then return the right list of cities`() = runBlocking {
         //GIVEN
         val list = TEST_CITY_LIST.toMutableList()
-        Mockito.`when`(weatherRepository.deleteCity(cairo)).then {
+        `when`(weatherRepository.deleteCity(cairo)).then {
             list.remove(cairo)
         }
-        Mockito.`when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
+        `when`(weatherRepository.getCities()).thenReturn(flow { emit(list) })
 
         //WHEN
         deleteCityUseCase.execute(cairo)
@@ -46,10 +47,8 @@ class DeleteCityUseCaseTest {
     @Test(expected = Exception::class)
     fun `When response is not successful Then throw exception`() = runBlocking {
         //GIVEN
-        Mockito.`when`(weatherRepository.deleteCity(cairo)).thenThrow(Exception())
+        `when`(weatherRepository.deleteCity(cairo)).then { throw (Exception()) }
         //WHEN
         deleteCityUseCase.execute(cairo)
-
-        //THEN Exception is thrown
     }
 }
