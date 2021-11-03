@@ -89,7 +89,7 @@ class HistoricalViewModel(
                 .build()
         WorkManager.getInstance(app).enqueueUniquePeriodicWork(
             "UpdateHistorical",
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
             updateWorkRequest
         )
     }
