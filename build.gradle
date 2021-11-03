@@ -4,6 +4,7 @@ buildscript {
         kotlin_version = "1.5.31"
         gradle_version = "7.0.3"
         hilt_version = '2.40'
+        androidX_hilt_version = "1.0.0"
         coroutines_version = "1.5.2"
         room_version = "2.3.0"
         nav_version = "2.3.5"
@@ -24,7 +25,8 @@ buildscript {
         androidx_test_core_version = "1.4.0"
         mockito_version = '4.0.0'
         androidX_test_rules_version = "1.4.0"
-        robolectric_version = '4.6.1'
+        robolectric_version = "4.6.1"
+        work_version = "2.7.0"
     }
     repositories {
         google()

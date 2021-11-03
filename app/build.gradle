@@ -117,6 +117,13 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    // AndroidX Hilt
+    implementation "androidx.hilt:hilt-work:$androidX_hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$androidX_hilt_version"
+
+    // Work Manager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     // Unit Testing
     testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.arch.core:core-testing:$arch_version"
@@ -124,7 +131,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation "com.google.truth:truth:$truth_version"
-    testImplementation"org.mockito:mockito-inline:$mockito_version"
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3_version"
 
     // AndroidX Test - JVM Testing

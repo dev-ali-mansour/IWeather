@@ -5,10 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.work.*
 import dev.alimansour.iweather.R
 import dev.alimansour.iweather.domain.model.Historical
 import dev.alimansour.iweather.domain.usecase.historical.GetHistoricalDataUseCase
 import dev.alimansour.iweather.domain.usecase.historical.UpdateHistoricalDataUseCase
+import dev.alimansour.iweather.presentation.workers.UpdateHistoricalWorker
 import dev.alimansour.iweather.util.ActionState
 import dev.alimansour.iweather.util.ConnectivityManager
 import dev.alimansour.iweather.util.Resource
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -74,6 +77,22 @@ class HistoricalViewModel(
                 }
             } else _actionFlow.value = Resource.Error(app.getString(R.string.device_not_connected))
         }
+
+    fun startUpdateHistoricalWorker() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val updateWorkRequest =
+            PeriodicWorkRequestBuilder<UpdateHistoricalWorker>(1, TimeUnit.DAYS)
+                .setConstraints(constraints)
+                .build()
+        WorkManager.getInstance(app).enqueueUniquePeriodicWork(
+            "UpdateHistorical",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            updateWorkRequest
+        )
+    }
 }
 
 @Singleton

@@ -22,6 +22,7 @@ import dev.alimansour.iweather.R
 import dev.alimansour.iweather.databinding.ActivityMainBinding
 import dev.alimansour.iweather.databinding.SearchBottomSheetBinding
 import dev.alimansour.iweather.presentation.cities.CitiesViewModel
+import dev.alimansour.iweather.presentation.historical.HistoricalViewModel
 import dev.alimansour.iweather.util.ActionState
 import dev.alimansour.iweather.util.Resource
 import dev.alimansour.iweather.util.dp
@@ -49,7 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     @Inject
-    lateinit var viewModel: CitiesViewModel
+    lateinit var citiesViewModel: CitiesViewModel
+
+    @Inject
+    lateinit var historicalViewModel: HistoricalViewModel
 
     var toolbarTitle: String
         get() = binding.toolbarTitle.text.toString()
@@ -93,15 +97,15 @@ class MainActivity : AppCompatActivity() {
                 collectActionFlow()
             }
         }
-
         binding.fab.setOnClickListener { view ->
             view.visibility = View.GONE
             searchForCity()
         }
+        historicalViewModel.startUpdateHistoricalWorker()
     }
 
     private suspend fun collectActionFlow() {
-        viewModel.actionFlow.collect { resource ->
+        citiesViewModel.actionFlow.collect { resource ->
             when (resource) {
                 is Resource.Loading -> binding.progressBar.isVisible = true
                 is Resource.Success -> {
@@ -156,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                             val cityName = sheetBinding.searchCityEditText.text.toString()
                             if (cityName.isNotEmpty()) {
                                 Timber.d("Searching for city: $cityName")
-                                viewModel.addCity(cityName)
+                                citiesViewModel.addCity(cityName)
                             }
                             sheetDialog.dismiss()
 
